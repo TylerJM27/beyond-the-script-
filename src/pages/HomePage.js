@@ -27,15 +27,18 @@ const HomePage = () => {
                         <Col>
                             <CardTitle
                                 tag="h1"
-                                className="display-4"
                                 style={{
+                                    fontFamily: "Italiana",
                                     fontSize: "calc(2rem + 2vw)",
                                     whiteSpace: "nowrap",
                                 }}
                             >
-                                JENNI GREEN - MILLER
+                                JENNI GREENMILLER
                             </CardTitle>
-                            <CardSubtitle tag="h5">
+                            <CardSubtitle
+                                tag="h5"
+                                style={{ fontFamily: "Italiana" }}
+                            >
                                 ACTOR - WRITER - INSTRUCTOR
                             </CardSubtitle>
                         </Col>
@@ -57,9 +60,10 @@ const HomePage = () => {
                         >
                             <CardTitle
                                 tag="h1"
-                                className="text-start text-center display-4"
+                                className="text-start text-center"
                                 style={{
                                     fontSize: "calc(2rem + 2vw)",
+                                    fontFamily: "Italiana",
                                     whiteSpace: "nowrap",
                                     textAlign: "left",
                                     marginRight: "auto",
@@ -80,6 +84,7 @@ const HomePage = () => {
                                 body
                                 className="text-end text-center my-5"
                                 style={{
+                                    fontFamily: "Italiana",
                                     textAlign: "right",
                                     marginRight: "auto",
                                     marginLeft: "auto",
@@ -102,6 +107,24 @@ const HomePage = () => {
                                 libero, dolore voluptas. Veritatis error impedit
                                 harum non minima quisquam ullam repellat aperiam
                                 autem qui adipisci excepturi nemo, quis veniam.
+                                <br />
+                                Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Animi laborum ad explicabo
+                                officiis! Explicabo cumque eaque illum totam
+                                natus error. Sunt ad impedit at quis quod illum
+                                sed incidunt possimus vitae praesentium itaque
+                                delectus consequuntur aliquam, vel similique
+                                perspiciatis. Cumque aut mollitia incidunt
+                                ducimus cupiditate. Maiores dicta, veritatis
+                                laudantium, adipisci iste sit sed vitae quam
+                                reprehenderit ex officia cum quod soluta,
+                                officiis tempora dolor fuga inventore ea
+                                ducimus? Facilis ullam laborum modi. Sint
+                                tempora nemo odit tenetur debitis, dolorum
+                                blanditiis quisquam quo. Maxime exercitationem
+                                odit nisi provident corporis quisquam soluta
+                                deleniti! Neque ea error temporibus pariatur
+                                omnis commodi maxime iusto.
                             </CardText>
                         </Col>
                     </Row>

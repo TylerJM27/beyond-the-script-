@@ -17,7 +17,7 @@ const NavbarToggle = () => {
 
     return (
         <Container className='navbar-container'sticky='top' style={{padding: '0'}}> 
-        <Navbar className='navbar-toggle'>
+        <Navbar dark className='navbar-toggle'>
             <NavbarBrand className='ms-5' href='/'>
             </NavbarBrand>
             <NavbarToggler onClick = {() => setMenuOpen(!menuOpen)}>
@@ -25,29 +25,29 @@ const NavbarToggle = () => {
             </NavbarToggler>
             <Collapse isOpen = {menuOpen} navbar className='custom-collapse'>
                 <Nav className='ms-auto' navbar>
-                    <NavItem>
+                <NavItem>
                         <NavLink className='nav-link' to='/'>  
-                            <i className="fa fa-home fa-lg" /> Home
-                        </NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink className='nav-link' to='/about'>  
-                            <i className="fa fa-info fa-lg" /> About
-                        </NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink className='nav-link' to='/contact'>  
-                            <i className="fa fa-address-card fa-lg" /> Contact
-                        </NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink className='nav-link' to='/projects'>  
-                            <i className="fa fa-list fa-lg" /> Projects
+                            Home
                         </NavLink>
                     </NavItem>
                     <NavItem>
                         <NavLink className='nav-link' to='/works'>  
-                            <i className="fa fa-home fa-lg" /> Works
+                            Works
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink className='nav-link' to='/projects'>  
+                            Projects
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink className='nav-link' to='/about'>  
+                            About
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink className='nav-link' to='/contact'>  
+                            Contact
                         </NavLink>
                     </NavItem>
                 </Nav>
