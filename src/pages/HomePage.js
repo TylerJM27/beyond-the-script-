@@ -59,7 +59,6 @@ const HomePage = () => {
                             lg={{ size: 6, offset: 0.25 }}
                         >
                             <CardTitle
-                                tag="h1"
                                 className="text-start text-center"
                                 style={{
                                     fontSize: "calc(2rem + 2vw)",

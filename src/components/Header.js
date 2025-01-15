@@ -20,25 +20,33 @@ const Header = () => {
                         className="me-auto d-none d-md-flex align-items-center"
                         navbar
                     >
-                        <NavItem className='mx-md-2 mx-lg-4 mx-xl-5 me-xl-5'>
+                        <NavItem className="mx-md-2 mx-lg-4 mx-xl-5 me-xl-5">
                             <NavLink className="nav-link" to="/">
                                 Home
                             </NavLink>
                         </NavItem>
-                        <NavItem className='mx-md-2 mx-lg-4 mx-xl-5'>
+                        <NavItem className="mx-md-2 mx-lg-4 mx-xl-5">
                             <NavLink className="nav-link" to="/works">
                                 Works
                             </NavLink>
                         </NavItem>
-                        <NavItem className='mx-md-2 mx-lg-4 mx-xl-5'>
+                        <NavItem className="mx-md-2 mx-lg-4 mx-xl-5">
                             <NavLink className="nav-link" to="/projects">
                                 Projects
                             </NavLink>
                         </NavItem>
                     </Nav>
 
-                    <NavbarBrand href="/" className="mx-auto mx-lg-0 mx-xl-0 mx-xxl-0 text-center">
-                        <h2 style={{ fontFamily: "Italiana", fontSize: "calc(1rem + 2vw)" }}>
+                    <NavbarBrand
+                        href="/"
+                        className="mx-auto mx-lg-0 mx-xl-0 mx-xxl-0 text-center"
+                    >
+                        <h2
+                            style={{
+                                fontFamily: "Italiana",
+                                fontSize: "calc(1rem + 2vw)",
+                            }}
+                        >
                             JENNI GREENMILLER
                         </h2>
                     </NavbarBrand>
@@ -47,12 +55,12 @@ const Header = () => {
                         className="ms-auto d-none d-md-flex align-items-center"
                         navbar
                     >
-                        <NavItem className='mx-md-2 mx-lg-4 mx-xl-5'>
+                        <NavItem className="mx-md-2 mx-lg-4 mx-xl-5">
                             <NavLink className="nav-link" to="/about">
                                 About
                             </NavLink>
                         </NavItem>
-                        <NavItem className='mx-md-2 mx-lg-4 mx-xl-5 ms-xl-5'>
+                        <NavItem className="mx-md-2 mx-lg-4 mx-xl-5 ms-xl-5">
                             <NavLink className="nav-link" to="/contact">
                                 Contact
                             </NavLink>
@@ -92,13 +100,6 @@ const Header = () => {
                     </Nav>
                 </Collapse>
             </Navbar>
-            <div
-                style={{
-                    borderBottom: "2px solid #182D09",
-                    width: "80%",
-                    margin: "0 auto",
-                }}
-            ></div>
         </>
     );
 };
