@@ -15,9 +15,9 @@ const Header = () => {
     return (
         <>
             <Navbar light sticky="top" expand="md">
-                <div className="d-flex align-items-center w-100">
+                <div className=" d-flex align-items-center w-100">
                     <Nav
-                        className="me-auto d-none d-md-flex align-items-center"
+                        className="g-5 me-auto d-none d-md-flex align-items-center "
                         navbar
                     >
                         <NavItem className="mx-md-2 mx-lg-4 mx-xl-5 me-xl-5">

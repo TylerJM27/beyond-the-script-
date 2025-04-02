@@ -33,7 +33,7 @@ const HomePage = () => {
                                     whiteSpace: "nowrap",
                                 }}
                             >
-                                JENNI GREENMILLER
+                                Alexandra Castle
                             </CardTitle>
                             <CardSubtitle
                                 tag="h5"

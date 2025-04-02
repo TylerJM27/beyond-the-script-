@@ -14,10 +14,12 @@ button.website-button:hover {
     top: 0;
     z-index: 10;
     padding-right: 0;
+    margin-right: 50px !important;
 }
 
 .navbar-toggle {
-    position: absolute;
+    width: 100vw;
+    max-width: 100%;
 }
 
 .custom-collapse {
