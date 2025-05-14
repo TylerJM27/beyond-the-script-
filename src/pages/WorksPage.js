@@ -1,6 +1,5 @@
 import Header from "../components/Header";
 import { useRef } from "react";
-import { Row, Col, Button, Card, CardTitle, CardText } from "reactstrap";
 import CarouselOfImages from "../components/CarouselOfImages";
 
 const WorksPage = () => {
@@ -9,148 +8,81 @@ const WorksPage = () => {
     const directingRef = useRef();
 
     return (
-        <div className="works-page-background">
-            <div style={{ position: "fixed", width: "100vw", zIndex: 10 }}>
+        <div className="min-h-screen bg-cream">
+            {/* Fixed header with proper z-index */}
+            <div className="fixed w-full z-10">
                 <Header />
             </div>
-            <div
-                className="d-flex flex-column justify-content-around align-items-center"
-                style={{ height: "100vh", width: "100%", zIndex: -1 }}
-            >
-                <Row className="d-flex align-items-center mx-4 my-2 mt-5">
-                    <Col
-                        xs="12"
-                        xl="auto"
-                        className="d-flex justify-content-center align-items-center"
-                        style={{ paddingBottom: "20px" }}
-                    >
-                        <Button
-                            style={{
-                                fontFamily: "Italiana",
-                                fontSize: "20px",
-                                backgroundColor: "#e98074",
-                            }}
-                            className="website-button"
+
+            {/* Main content with padding to prevent header overlap */}
+            <div className="flex flex-col justify-around items-center min-h-screen w-full pt-32 pb-16">
+                <div className="flex flex-col md:flex-row items-center mx-4 my-2">
+                    <div className="w-full md:w-auto flex justify-center items-center pb-5 md:pb-0">
+                        <button
+                            className="font-italiana text-xl bg-salmon hover:bg-salmon-dark text-white py-2 px-4 rounded transition-colors"
                             onClick={() => {
                                 worksRef.current.scrollIntoView();
                             }}
                         >
                             Created Works
-                        </Button>
-                    </Col>
-                    <Col
-                        className=" d-flex justify-content-center align-items-center"
-                        style={{ fontFamily: "Italiana", fontSize: "20px" }}
-                    >
+                        </button>
+                    </div>
+                    <div className="font-italiana text-xl text-center md:text-left md:ml-6">
                         Lorem ipsum dolor, sit amet consectetur adipisicing
                         elit. Voluptatem in provident nobis minus exercitationem
                         quae voluptatum natus at saepe ipsum?
-                    </Col>
-                </Row>
-                <Row className="d-flex align-items-center mx-4 my-2">
-                    <Col
-                        xs="12"
-                        xl="auto"
-                        className="d-flex justify-content-center align-items-center"
-                        style={{ paddingBottom: "20px" }}
-                    >
-                        <Button
-                            style={{
-                                fontFamily: "Italiana",
-                                fontSize: "20px",
-                                backgroundColor: "#e98074",
-                            }}
-                            className="website-button"
+                    </div>
+                </div>
+
+                <div className="flex flex-col md:flex-row items-center mx-4 my-2">
+                    <div className="w-full md:w-auto flex justify-center items-center pb-5 md:pb-0">
+                        <button
+                            className="font-italiana text-xl bg-salmon hover:bg-salmon-dark text-white py-2 px-4 rounded transition-colors"
                             onClick={() => {
                                 instructingRef.current.scrollIntoView();
                             }}
                         >
                             Instructing
-                        </Button>
-                    </Col>
-                    <Col
-                        className="d-flex justify-content-center align-items-center"
-                        style={{ fontFamily: "Italiana", fontSize: "20px" }}
-                    >
+                        </button>
+                    </div>
+                    <div className="font-italiana text-xl text-center md:text-left md:ml-6">
                         Lorem ipsum dolor, sit amet consectetur adipisicing
                         elit. Voluptatem in provident nobis minus exercitationem
                         quae voluptatum natus at saepe ipsum?
-                    </Col>
-                </Row>
-                <Row className="d-flex  align-items-center mx-4 my-2">
-                    <Col
-                        xs="12"
-                        xl="auto"
-                        className="d-flex justify-content-center align-items-center"
-                        style={{ paddingBottom: "20px" }}
-                    >
-                        <Button
-                            style={{
-                                fontFamily: "Italiana",
-                                fontSize: "20px",
-                                backgroundColor: "#e98074",
-                            }}
-                            className="website-button"
+                    </div>
+                </div>
+
+                <div className="flex flex-col md:flex-row items-center mx-4 my-2">
+                    <div className="w-full md:w-auto flex justify-center items-center pb-5 md:pb-0">
+                        <button
+                            className="font-italiana text-xl bg-salmon hover:bg-salmon-dark text-white py-2 px-4 rounded transition-colors"
                             onClick={() => {
                                 directingRef.current.scrollIntoView();
                             }}
                         >
                             Directing
-                        </Button>
-                    </Col>
-                    <Col
-                        className="d-flex justify-content-center align-items-center"
-                        style={{ fontFamily: "Italiana", fontSize: "20px" }}
-                    >
+                        </button>
+                    </div>
+                    <div className="font-italiana text-xl text-center md:text-left md:ml-6">
                         Lorem ipsum dolor, sit amet consectetur adipisicing
                         elit. Voluptatem in provident nobis minus exercitationem
                         quae voluptatum natus at saepe ipsum?
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </div>
+
+            {/* Created Works Section */}
             <div
                 ref={worksRef}
-                className="d-flex flex-column justify-content-around align-items-center works-page-background"
-                style={{
-                    height: "100vh",
-                    width: "100%",
-                    scrollMarginTop: "100px",
-                }}
+                className="flex flex-col justify-around items-center bg-cream min-h-screen w-full pt-32 pb-16 scroll-mt-32"
             >
-                <Row>
-                    <Col xs="12" xl={{ size: 3, offset: 1 }}>
-                        <Card
-                            body
-                            className="my-2"
-                            style={{
-                                width: "auto",
-                                height: "auto",
-                                border: "none",
-                                backgroundColor: "#eae7dc",
-                            }}
-                        >
-                            <CardTitle
-                                className="my-2 text-center"
-                                style={{
-                                    fontSize: "calc(2rem + 2vw)",
-                                    fontFamily: "Italiana",
-                                    whiteSpace: "nowrap",
-                                    textAlign: "left",
-                                    marginRight: "auto",
-                                    marginLeft: "auto",
-                                    color: "#e98074",
-                                }}
-                            >
+                <div className="flex flex-col xl:flex-row w-full px-4 xl:px-12">
+                    <div className="w-full xl:w-1/4 xl:ml-8 mb-8 xl:mb-0">
+                        <div className="bg-cream border-none p-4">
+                            <h2 className="text-center text-5xl md:text-6xl font-italiana text-salmon mb-4">
                                 Created Works.
-                            </CardTitle>
-                            <CardText
-                                body
-                                className="text-center"
-                                style={{
-                                    fontFamily: "Italiana",
-                                    fontSize: "20px",
-                                }}
-                            >
+                            </h2>
+                            <p className="text-center font-italiana text-xl">
                                 Lorem ipsum dolor sit amet consectetur
                                 adipisicing elit. Aliquam cum, eaque consequatur
                                 optio officiis distinctio? Excepturi voluptatem
@@ -168,85 +100,34 @@ const WorksPage = () => {
                                 eum doloribus? Velit, labore iusto expedita
                                 quasi facere molestias nihil, sed a impedit illo
                                 perspiciatis id asperiores sit.
-                            </CardText>
-                        </Card>
-                    </Col>
-                    <Col
-                        xs="12"
-                        xl={{ size: 7, offset: 1 }}
-                        className="d-flex justify-content-center align-items-center"
-                    >
-                        <div
-                            style={{
-                                width: "80%",
-                                height: "auto",
-                                overflow: "hidden",
-                            }}
-                        >
+                            </p>
+                        </div>
+                    </div>
+                    <div className="w-full xl:w-7/12 xl:ml-16 flex justify-center items-center">
+                        <div className="w-4/5 overflow-hidden">
                             <CarouselOfImages />
                         </div>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </div>
+
+            {/* Instructing Section */}
             <div
                 ref={instructingRef}
-                className="d-flex flex-column justify-content-around align-items-center works-page-background"
-                style={{
-                    height: "100vh",
-                    width: "100%",
-                    scrollMarginTop: "100px",
-                }}
+                className="flex flex-col justify-around items-center bg-cream min-h-screen w-full pt-32 pb-16 scroll-mt-32"
             >
-                <Row>
-                    <Col
-                        xs="12"
-                        xl={{ size: 7, offset: 1 }}
-                        className="d-flex justify-content-center align-items-center"
-                    >
-                        <div
-                            style={{
-                                width: "80%",
-                                height: "auto",
-
-                                overflow: "hidden",
-                            }}
-                        >
+                <div className="flex flex-col-reverse xl:flex-row w-full px-4 xl:px-12">
+                    <div className="w-full xl:w-7/12 xl:ml-8 flex justify-center items-center mt-8 xl:mt-0">
+                        <div className="w-4/5 overflow-hidden">
                             <CarouselOfImages />
                         </div>
-                    </Col>
-                    <Col xs="12" xl="3">
-                        <Card
-                            body
-                            className="my-2"
-                            style={{
-                                width: "auto",
-                                height: "auto",
-                                border: "none",
-                                backgroundColor: "#eae7dc",
-                            }}
-                        >
-                            <CardTitle
-                                className="my-2 text-center"
-                                style={{
-                                    fontSize: "calc(2rem + 2vw)",
-                                    fontFamily: "Italiana",
-                                    whiteSpace: "nowrap",
-                                    textAlign: "left",
-                                    marginRight: "auto",
-                                    marginLeft: "auto",
-                                    color: "#e98074",
-                                }}
-                            >
+                    </div>
+                    <div className="w-full xl:w-1/4 xl:ml-16">
+                        <div className="bg-cream border-none p-4">
+                            <h2 className="text-center text-5xl md:text-6xl font-italiana text-salmon mb-4">
                                 Instructing.
-                            </CardTitle>
-                            <CardText
-                                body
-                                className="text-center"
-                                style={{
-                                    fontFamily: "Italiana",
-                                    fontSize: "20px",
-                                }}
-                            >
+                            </h2>
+                            <p className="text-center font-italiana text-xl">
                                 Lorem ipsum dolor sit amet consectetur
                                 adipisicing elit. Aliquam cum, eaque consequatur
                                 optio officiis distinctio? Excepturi voluptatem
@@ -264,55 +145,24 @@ const WorksPage = () => {
                                 eum doloribus? Velit, labore iusto expedita
                                 quasi facere molestias nihil, sed a impedit illo
                                 perspiciatis id asperiores sit.
-                                <br />
-                            </CardText>
-                        </Card>
-                    </Col>
-                </Row>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            {/* Directing Section */}
             <div
                 ref={directingRef}
-                className="d-flex flex-column justify-content-around align-items-center works-page-background"
-                style={{
-                    height: "100vh",
-                    width: "100%",
-                    scrollMarginTop: "100px",
-                }}
+                className="flex flex-col justify-around items-center bg-cream min-h-screen w-full pt-32 pb-16 scroll-mt-32"
             >
-                <Row>
-                    <Col xs="12" xl={{ size: 3, offset: 1 }}>
-                        <Card
-                            body
-                            className="my-2"
-                            style={{
-                                width: "auto",
-                                height: "auto",
-                                border: "none",
-                                backgroundColor: "#eae7dc",
-                            }}
-                        >
-                            <CardTitle
-                                className="my-2 text-center"
-                                style={{
-                                    fontSize: "calc(2rem + 2vw)",
-                                    fontFamily: "Italiana",
-                                    whiteSpace: "nowrap",
-                                    textAlign: "left",
-                                    marginRight: "auto",
-                                    marginLeft: "auto",
-                                    color: "#e98074",
-                                }}
-                            >
+                <div className="flex flex-col xl:flex-row w-full px-4 xl:px-12">
+                    <div className="w-full xl:w-1/4 xl:ml-8 mb-8 xl:mb-0">
+                        <div className="bg-cream border-none p-4">
+                            <h2 className="text-center text-5xl md:text-6xl font-italiana text-salmon mb-4">
                                 Directing.
-                            </CardTitle>
-                            <CardText
-                                body
-                                className="text-center"
-                                style={{
-                                    fontFamily: "Italiana",
-                                    fontSize: "20px",
-                                }}
-                            >
+                            </h2>
+                            <p className="text-center font-italiana text-xl">
                                 Lorem ipsum dolor sit amet consectetur
                                 adipisicing elit. Aliquam cum, eaque consequatur
                                 optio officiis distinctio? Excepturi voluptatem
@@ -330,26 +180,15 @@ const WorksPage = () => {
                                 eum doloribus? Velit, labore iusto expedita
                                 quasi facere molestias nihil, sed a impedit illo
                                 perspiciatis id asperiores sit.
-                            </CardText>
-                        </Card>
-                    </Col>
-                    <Col
-                        xs="12"
-                        xl={{ size: 7, offset: 1 }}
-                        className="d-flex justify-content-center align-items-center"
-                    >
-                        <div
-                            style={{
-                                width: "80%",
-                                height: "auto",
-
-                                overflow: "hidden",
-                            }}
-                        >
+                            </p>
+                        </div>
+                    </div>
+                    <div className="w-full xl:w-7/12 xl:ml-16 flex justify-center items-center">
+                        <div className="w-4/5 overflow-hidden">
                             <CarouselOfImages />
                         </div>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </div>
         </div>
     );
