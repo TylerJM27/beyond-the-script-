@@ -5,17 +5,20 @@ import works3 from "../assets/images/works3.jpg";
 export const WORKS = [
     {
         id: 0,
-        altText: "Slide 1",
+        altText: "Project One",
         image: works1,
+        projectUrl: "https://project1.example.com", // Add project URLs
     },
     {
         id: 1,
-        altText: "Slide 2",
+        altText: "Project Two",
         image: works2,
+        projectUrl: "https://project2.example.com",
     },
     {
         id: 2,
-        altText: "Slide 3",
+        altText: "Project Three",
         image: works3,
+        projectUrl: "https://project3.example.com",
     },
 ];

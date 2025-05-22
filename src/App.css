@@ -62,3 +62,7 @@ button.website-button:hover {
     width: 100%;
     position: relative;
 }
+
+.carousel-inner {
+    height: 100%;
+}
