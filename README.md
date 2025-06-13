@@ -20,6 +20,33 @@ Tech Stack:
 
 -   Testing: Jest, React Testing Library
 
+How to Run the App Locally:
+
+If you download this project as a ZIP file, follow these steps to run it on your local machine:
+
+Unzip the project
+
+Extract the contents of the ZIP file to a folder on your computer.
+
+Open a terminal/command prompt
+
+Navigate to the project folder you just unzipped.
+
+Install dependencies
+
+Make sure you have Node.js installed (version 18.20.5 recommended). Then run:
+
+npm install
+
+This will install all required packages listed in package.json.
+
+Start the development server
+Run the command:
+
+npm start
+
+This will start the React app and open it in your default browser, usually at http://localhost:3000.
+
 COMMIT NOTES:
 
 COMMIT - Home Page:
