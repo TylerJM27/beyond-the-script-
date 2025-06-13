@@ -1,14 +1,35 @@
 import Header from "../components/Header";
 import NavbarToggle from "../components/NavbarToggle";
 import { useRef, useState, useEffect } from "react";
+import { motion, useInView } from "motion/react";
 import CarouselOfImages from "../components/CarouselOfImages";
 import portlandSky from "../app/assets/images/portland-skyline.jpg";
+import theaterScreen from "../app/assets/images/theater-screen.jpg";
 
 const WorksPage = () => {
     const worksRef = useRef();
     const instructingRef = useRef();
     const directingRef = useRef();
     const firstSectionRef = useRef();
+
+    // Refs for carousel animations
+    const worksCarouselRef = useRef();
+    const instructingCarouselRef = useRef();
+    const directingCarouselRef = useRef();
+
+    // Check if carousels are in view
+    const isWorksCarouselInView = useInView(worksCarouselRef, {
+        once: true,
+        margin: "-100px",
+    });
+    const isInstructingCarouselInView = useInView(instructingCarouselRef, {
+        once: true,
+        margin: "-100px",
+    });
+    const isDirectingCarouselInView = useInView(directingCarouselRef, {
+        once: true,
+        margin: "-100px",
+    });
 
     const [showHeader, setShowHeader] = useState(false);
     const [headerSlideProgress, setHeaderSlideProgress] = useState(0);
@@ -191,9 +212,15 @@ const WorksPage = () => {
             {/* Created Works Section */}
             <div
                 ref={worksRef}
-                className="flex flex-col justify-center content-center items-center bg-cream min-h-screen w-full pt-16 pb-16 scroll-mt-27"
+                className="flex flex-col justify-center content-center items-center bg-cream min-h-screen w-full pt-16 pb-16 scroll-mt-27 relative"
             >
-                <div className="flex flex-col xl:flex-row w-full px-4 xl:px-12">
+                {/* Theater screen background */}
+                <div
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
+                    style={{ backgroundImage: `url(${theaterScreen})` }}
+                />
+
+                <div className="flex flex-col xl:flex-row w-full px-4 xl:px-12 relative z-10">
                     <div className="w-full xl:w-1/3 flex justify-center content-center xl:ml-12 mb-4 order-last">
                         <div className="bg-cream border-none p-4">
                             <h2 className="text-center text-5xl md:text-6xl font-italiana text-salmon mb-4">
@@ -221,9 +248,29 @@ const WorksPage = () => {
                         </div>
                     </div>
                     <div className="w-full xl:w-7/12 xl:ml-16 flex justify-center items-center content-center">
-                        <div className="w-4/5 overflow-hidden">
+                        <motion.div
+                            ref={worksCarouselRef}
+                            className="w-4/5 overflow-hidden relative z-20"
+                            initial={{ scale: 0, borderRadius: "50%" }}
+                            animate={
+                                isWorksCarouselInView
+                                    ? {
+                                          scale: 1,
+                                          borderRadius: "0%",
+                                      }
+                                    : {
+                                          scale: 0,
+                                          borderRadius: "50%",
+                                      }
+                            }
+                            transition={{
+                                duration: 1.2,
+                                ease: "easeOut",
+                                borderRadius: { duration: 0.8, delay: 0.4 },
+                            }}
+                        >
                             <CarouselOfImages />
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
@@ -231,13 +278,39 @@ const WorksPage = () => {
             {/* Instructing Section */}
             <div
                 ref={instructingRef}
-                className="flex flex-col justify-center content-center items-center bg-cream min-h-screen w-full pt-16 pb-16 scroll-mt-16"
+                className="flex flex-col justify-center content-center items-center bg-cream min-h-screen w-full pt-16 pb-16 scroll-mt-16 relative"
             >
-                <div className="flex flex-col-reverse xl:flex-row w-full px-4 xl:px-12">
+                {/* Theater screen background */}
+                <div
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
+                    style={{ backgroundImage: `url(${theaterScreen})` }}
+                />
+
+                <div className="flex flex-col-reverse xl:flex-row w-full px-4 xl:px-12 relative z-10">
                     <div className="w-full xl:w-7/12 xl:ml-8 flex justify-center items-center mt-8 xl:mt-0 order-last xl:order-first">
-                        <div className="w-4/5 overflow-hidden">
+                        <motion.div
+                            ref={instructingCarouselRef}
+                            className="w-4/5 overflow-hidden relative z-20"
+                            initial={{ scale: 0, borderRadius: "50%" }}
+                            animate={
+                                isInstructingCarouselInView
+                                    ? {
+                                          scale: 1,
+                                          borderRadius: "0%",
+                                      }
+                                    : {
+                                          scale: 0,
+                                          borderRadius: "50%",
+                                      }
+                            }
+                            transition={{
+                                duration: 1.2,
+                                ease: "easeOut",
+                                borderRadius: { duration: 0.8, delay: 0.4 },
+                            }}
+                        >
                             <CarouselOfImages />
-                        </div>
+                        </motion.div>
                     </div>
                     <div className="w-full xl:w-1/3 flex justify-center content-center xl:ml-12 mb-4">
                         <div className="bg-cream border-none p-4">
@@ -271,9 +344,15 @@ const WorksPage = () => {
             {/* Directing Section */}
             <div
                 ref={directingRef}
-                className="flex flex-col justify-center content-center items-center bg-cream min-h-screen w-full pt-16 pb-16 scroll-mt-16"
+                className="flex flex-col justify-center content-center items-center bg-cream min-h-screen w-full pt-16 pb-16 scroll-mt-16 relative"
             >
-                <div className="flex flex-col xl:flex-row w-full px-4 xl:px-12">
+                {/* Theater screen background */}
+                <div
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
+                    style={{ backgroundImage: `url(${theaterScreen})` }}
+                />
+
+                <div className="flex flex-col xl:flex-row w-full px-4 xl:px-12 relative z-10">
                     <div className="w-full xl:w-1/3 flex justify-center content-center xl:ml-12 mb-4 order-last">
                         <div className="bg-cream border-none p-4">
                             <h2 className="text-center text-5xl md:text-6xl font-italiana text-salmon mb-4">
@@ -301,9 +380,29 @@ const WorksPage = () => {
                         </div>
                     </div>
                     <div className="w-full xl:w-7/12 xl:ml-16 flex justify-center items-center">
-                        <div className="w-4/5 overflow-hidden">
+                        <motion.div
+                            ref={directingCarouselRef}
+                            className="w-4/5 overflow-hidden relative z-20"
+                            initial={{ scale: 0, borderRadius: "50%" }}
+                            animate={
+                                isDirectingCarouselInView
+                                    ? {
+                                          scale: 1,
+                                          borderRadius: "0%",
+                                      }
+                                    : {
+                                          scale: 0,
+                                          borderRadius: "50%",
+                                      }
+                            }
+                            transition={{
+                                duration: 1.2,
+                                ease: "easeOut",
+                                borderRadius: { duration: 0.8, delay: 0.4 },
+                            }}
+                        >
                             <CarouselOfImages />
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
