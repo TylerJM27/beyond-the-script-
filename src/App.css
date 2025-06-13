@@ -66,3 +66,138 @@ button.website-button:hover {
 .carousel-inner {
     height: 100%;
 }
+
+body {
+    cursor: url("/public/theatre-icon.png"), auto;
+}
+
+/* Optional: Apply it to interactive elements too */
+button,
+a,
+input,
+textarea,
+select,
+label {
+    cursor: url("/public/theatre-icon.png"), auto;
+}
+
+.bg-custom-left {
+    background-repeat: no-repeat;
+    background-size: 110vw auto;
+    background-position: -400px 200px;
+    inset: 0;
+}
+
+.bg-custom-right {
+    background-repeat: no-repeat;
+    background-size: 110vw auto;
+    background-position: 200px 200px;
+    inset: 0;
+}
+
+@media (min-width: 640px) {
+    .bg-custom-left {
+        background-repeat: no-repeat;
+        background-size: 160vw auto;
+        background-position: -200px 150px;
+        inset: 0;
+    }
+}
+
+@media (min-width: 640px) {
+    .bg-custom-right {
+        background-repeat: no-repeat;
+        background-size: 160vw auto;
+        background-position: -200px 150px;
+        inset: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .bg-custom-left {
+        background-repeat: no-repeat;
+        background-size: 160vw auto;
+        background-position: -200px 200px;
+        inset: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .bg-custom-right {
+        background-repeat: no-repeat;
+        background-size: 160vw auto;
+        background-position: -200px 200px;
+        inset: 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    .bg-custom-left {
+        background-repeat: no-repeat;
+        background-size: 140vw auto;
+        background-position: -200px 200px;
+        inset: 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    .bg-custom-right {
+        background-repeat: no-repeat;
+        background-size: 140vw auto;
+        background-position: -200px 200px;
+        inset: 0;
+    }
+}
+
+@media (min-width: 1280px) {
+    .bg-custom-left {
+        background-repeat: no-repeat;
+        background-size: 124vw auto;
+        background-position: -360px 200px;
+        inset: 0;
+    }
+}
+
+@media (min-width: 1280px) {
+    .bg-custom-right {
+        background-repeat: no-repeat;
+        background-size: 124vw auto;
+        background-position: 61px 200px;
+        inset: 0;
+    }
+}
+
+@media (min-width: 1650px) {
+    .bg-custom-left {
+        background-repeat: no-repeat;
+        background-size: 124vw auto;
+        background-position: -500px 100px;
+        inset: 0;
+    }
+}
+
+@media (min-width: 1650px) {
+    .bg-custom-right {
+        background-repeat: no-repeat;
+        background-size: 124vw auto;
+        background-position: 61px 100px;
+        inset: 0;
+    }
+}
+@media (min-width: 2500px) {
+    .bg-custom-left {
+        background-repeat: no-repeat;
+        background-size: 80vw auto;
+        background-position: -300px 100px;
+        inset: 0;
+    }
+}
+
+@media (min-width: 2500px) {
+    .bg-custom-right {
+        background-repeat: no-repeat;
+        background-size: 80vw auto;
+        background-position: 800px 100px;
+        inset: 0;
+    }
+}

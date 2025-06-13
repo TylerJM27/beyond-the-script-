@@ -216,13 +216,15 @@ const WorksPage = () => {
             >
                 {/* Theater screen background */}
                 <div
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
-                    style={{ backgroundImage: `url(${theaterScreen})` }}
+                    className="bg-custom-left absolute opacity-80 w-full h-full"
+                    style={{
+                        backgroundImage: `url(${theaterScreen})`,
+                    }}
                 />
 
                 <div className="flex flex-col xl:flex-row w-full px-4 xl:px-12 relative z-10">
-                    <div className="w-full xl:w-1/3 flex justify-center content-center xl:ml-12 mb-4 order-last">
-                        <div className="bg-cream border-none p-4">
+                    <div className="w-full xl:w-1/3 flex justify-center content-center xl:ml-12 mb-4 order-last ">
+                        <div className="bg-cream border-none p-4 rounded">
                             <h2 className="text-center text-5xl md:text-6xl font-italiana text-salmon mb-4">
                                 Created Works.
                             </h2>
@@ -282,8 +284,10 @@ const WorksPage = () => {
             >
                 {/* Theater screen background */}
                 <div
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
-                    style={{ backgroundImage: `url(${theaterScreen})` }}
+                    className="bg-custom-right absolute opacity-80 w-full h-full"
+                    style={{
+                        backgroundImage: `url(${theaterScreen})`, // horizontal center, 20% from the top
+                    }}
                 />
 
                 <div className="flex flex-col-reverse xl:flex-row w-full px-4 xl:px-12 relative z-10">
@@ -313,7 +317,7 @@ const WorksPage = () => {
                         </motion.div>
                     </div>
                     <div className="w-full xl:w-1/3 flex justify-center content-center xl:ml-12 mb-4">
-                        <div className="bg-cream border-none p-4">
+                        <div className="bg-cream border-none p-4 rounded">
                             <h2 className="text-center text-5xl md:text-6xl font-italiana text-salmon mb-4">
                                 Instructing.
                             </h2>
@@ -348,8 +352,10 @@ const WorksPage = () => {
             >
                 {/* Theater screen background */}
                 <div
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
-                    style={{ backgroundImage: `url(${theaterScreen})` }}
+                    className="bg-custom-left absolute opacity-80 w-full h-full"
+                    style={{
+                        backgroundImage: `url(${theaterScreen})`, // horizontal center, 20% from the top
+                    }}
                 />
 
                 <div className="flex flex-col xl:flex-row w-full px-4 xl:px-12 relative z-10">

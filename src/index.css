@@ -12,20 +12,9 @@ body,
         "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Custom cursor */
-    cursor: url("/public/theatre-icon.png") auto;
 }
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
         monospace;
-}
-
-/* Ensure custom cursor applies to all interactive elements */
-button,
-a,
-input,
-textarea,
-select {
-    cursor: url("/public/theatre-icon.png"), pointer;
 }
