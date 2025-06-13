@@ -1,72 +1,189 @@
 import Header from "../components/Header";
-import { useRef } from "react";
+import NavbarToggle from "../components/NavbarToggle";
+import { useRef, useState, useEffect } from "react";
 import CarouselOfImages from "../components/CarouselOfImages";
+import portlandSky from "../app/assets/images/portland-skyline.jpg";
 
 const WorksPage = () => {
     const worksRef = useRef();
     const instructingRef = useRef();
     const directingRef = useRef();
+    const firstSectionRef = useRef();
+
+    const [showHeader, setShowHeader] = useState(false);
+    const [headerSlideProgress, setHeaderSlideProgress] = useState(0);
+    const [animationsTriggered, setAnimationsTriggered] = useState({
+        works: false,
+        instructing: false,
+        directing: false,
+    });
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (firstSectionRef.current) {
+                const firstSectionRect =
+                    firstSectionRef.current.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+
+                // Calculate how much of the first section has scrolled out of view
+                const scrollProgress = Math.max(
+                    0,
+                    Math.min(1, -firstSectionRect.top / windowHeight)
+                );
+
+                // Show header when we start scrolling past the first section
+                if (scrollProgress > 0.1) {
+                    setShowHeader(true);
+                    setHeaderSlideProgress(scrollProgress);
+                } else {
+                    setShowHeader(false);
+                    setHeaderSlideProgress(0);
+                }
+            }
+        };
+
+        // Trigger animations on mount with staggered delays
+        const triggerAnimations = () => {
+            setTimeout(() => {
+                setAnimationsTriggered((prev) => ({ ...prev, works: true }));
+            }, 300);
+
+            setTimeout(() => {
+                setAnimationsTriggered((prev) => ({
+                    ...prev,
+                    instructing: true,
+                }));
+            }, 600);
+
+            setTimeout(() => {
+                setAnimationsTriggered((prev) => ({
+                    ...prev,
+                    directing: true,
+                }));
+            }, 900);
+        };
+
+        triggerAnimations();
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const handleScrollToSection = (ref) => {
+        ref.current.scrollIntoView({ behavior: "smooth" });
+        // Trigger header animation when scrolling to sections
+        setTimeout(() => {
+            setShowHeader(true);
+            setHeaderSlideProgress(1);
+        }, 500);
+    };
 
     return (
-        <div className="min-h-screen bg-cream">
-            {/* Fixed header with proper z-index */}
-            <div className="fixed w-full z-10">
+        <div className="min-h-screen">
+            {/* NavbarToggle - shown initially */}
+            <div
+                className={`fixed w-full z-20 transition-opacity duration-500 ${
+                    showHeader ? "opacity-0 pointer-events-none" : "opacity-100"
+                }`}
+            >
+                <NavbarToggle />
+            </div>
+
+            {/* Header - slides in from right when scrolling */}
+            <div
+                className={`fixed w-full z-20 transition-transform duration-300 ${
+                    showHeader ? "translate-x-0" : "translate-x-full"
+                }`}
+                style={{
+                    transform: `translateX(${
+                        100 - headerSlideProgress * 100
+                    }%)`,
+                }}
+            >
                 <Header />
             </div>
 
-            {/* Main content with padding to prevent header overlap */}
-            <div className="flex flex-col justify-around items-center min-h-screen w-full pt-32 pb-16">
-                <div className="flex flex-col md:flex-row items-center mx-4 my-2">
-                    <div className="w-full md:w-auto flex justify-center items-center md:pb-0 pb-4">
-                        <button
-                            className="font-italiana text-xl bg-salmon hover:bg-salmon-dark text-white py-2 px-4 rounded transition-colors"
-                            onClick={() => {
-                                worksRef.current.scrollIntoView();
-                            }}
-                        >
-                            Created Works
-                        </button>
-                    </div>
-                    <div className="font-italiana text-xl text-center md:text-left md:ml-6 ">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing
-                        elit. Voluptatem in provident nobis minus exercitationem
-                        quae voluptatum natus at saepe ipsum?
-                    </div>
-                </div>
+            {/* First section with background image */}
+            <div
+                ref={firstSectionRef}
+                className="min-h-screen bg-cover bg-cover bg-no-repeat relative"
+                style={{ backgroundImage: `url(${portlandSky})` }}
+            >
+                {/* Dark overlay for better text readability */}
+                <div className="absolute inset-0 bg-black/20"></div>
 
-                <div className="flex flex-col md:flex-row items-center mx-4 my-2">
-                    <div className="w-full md:w-auto flex justify-center items-center md:pb-0 pb-4">
-                        <button
-                            className="font-italiana text-xl bg-salmon hover:bg-salmon-dark text-white py-2 px-4 rounded transition-colors"
-                            onClick={() => {
-                                instructingRef.current.scrollIntoView();
-                            }}
-                        >
-                            Instructing
-                        </button>
+                {/* Main content with padding to prevent navbar overlap */}
+                <div className="relative z-10 flex flex-col justify-around items-center min-h-screen w-full pt-32 pb-16">
+                    {/* Created Works Button - slides in from left */}
+                    <div
+                        className={`flex flex-col md:flex-row items-center mx-4 my-2 transition-all duration-1000 ease-out ${
+                            animationsTriggered.works
+                                ? "translate-x-0 opacity-100"
+                                : "-translate-x-full opacity-0"
+                        }`}
+                    >
+                        <div className="w-full md:w-auto flex justify-center items-center md:pb-0 pb-4">
+                            <button
+                                className="font-italiana text-xl bg-salmon hover:bg-salmon-dark text-white py-2 px-4 rounded transition-colors backdrop-blur-md bg-opacity-80"
+                                onClick={() => handleScrollToSection(worksRef)}
+                            >
+                                Created Works
+                            </button>
+                        </div>
+                        <div className="font-italiana text-xl text-center md:text-left md:ml-6 text-white backdrop-blur-sm bg-black/20 p-4 rounded">
+                            Lorem ipsum dolor, sit amet consectetur adipisicing
+                            elit. Voluptatem in provident nobis minus
+                            exercitationem quae voluptatum natus at saepe ipsum?
+                        </div>
                     </div>
-                    <div className="font-italiana text-xl text-center md:text-left md:ml-6">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing
-                        elit. Voluptatem in provident nobis minus exercitationem
-                        quae voluptatum natus at saepe ipsum?
-                    </div>
-                </div>
 
-                <div className="flex flex-col md:flex-row items-center mx-4 my-2">
-                    <div className="w-full md:w-auto flex justify-center items-center md:pb-0 pb-4">
-                        <button
-                            className="font-italiana text-xl bg-salmon hover:bg-salmon-dark text-white py-2 px-4 rounded transition-colors"
-                            onClick={() => {
-                                directingRef.current.scrollIntoView();
-                            }}
-                        >
-                            Directing
-                        </button>
+                    {/* Instructing Button - slides in from right */}
+                    <div
+                        className={`flex flex-col md:flex-row items-center mx-4 my-2 transition-all duration-1000 ease-out ${
+                            animationsTriggered.instructing
+                                ? "translate-x-0 opacity-100"
+                                : "translate-x-full opacity-0"
+                        }`}
+                    >
+                        <div className="w-full md:w-auto flex justify-center items-center md:pb-0 pb-4">
+                            <button
+                                className="font-italiana text-xl bg-salmon hover:bg-salmon-dark text-white py-2 px-4 rounded transition-colors backdrop-blur-md bg-opacity-80"
+                                onClick={() =>
+                                    handleScrollToSection(instructingRef)
+                                }
+                            >
+                                Instructing
+                            </button>
+                        </div>
+                        <div className="font-italiana text-xl text-center md:text-left md:ml-6 text-white backdrop-blur-sm bg-black/20 p-4 rounded">
+                            Lorem ipsum dolor, sit amet consectetur adipisicing
+                            elit. Voluptatem in provident nobis minus
+                            exercitationem quae voluptatum natus at saepe ipsum?
+                        </div>
                     </div>
-                    <div className="font-italiana text-xl text-center md:text-left md:ml-6">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing
-                        elit. Voluptatem in provident nobis minus exercitationem
-                        quae voluptatum natus at saepe ipsum?
+
+                    {/* Directing Button - slides in from left */}
+                    <div
+                        className={`flex flex-col md:flex-row items-center mx-4 my-2 transition-all duration-1000 ease-out ${
+                            animationsTriggered.directing
+                                ? "translate-x-0 opacity-100"
+                                : "-translate-x-full opacity-0"
+                        }`}
+                    >
+                        <div className="w-full md:w-auto flex justify-center items-center md:pb-0 pb-4">
+                            <button
+                                className="font-italiana text-xl bg-salmon hover:bg-salmon-dark text-white py-2 px-4 rounded transition-colors backdrop-blur-md bg-opacity-80"
+                                onClick={() =>
+                                    handleScrollToSection(directingRef)
+                                }
+                            >
+                                Directing
+                            </button>
+                        </div>
+                        <div className="font-italiana text-xl text-center md:text-left md:ml-6 text-white backdrop-blur-sm bg-black/20 p-4 rounded">
+                            Lorem ipsum dolor, sit amet consectetur adipisicing
+                            elit. Voluptatem in provident nobis minus
+                            exercitationem quae voluptatum natus at saepe ipsum?
+                        </div>
                     </div>
                 </div>
             </div>
@@ -74,7 +191,7 @@ const WorksPage = () => {
             {/* Created Works Section */}
             <div
                 ref={worksRef}
-                className="flex flex-col justify-center content-center items-center bg-cream min-h-screen w-full pt-16 pb-16 scroll-mt-16"
+                className="flex flex-col justify-center content-center items-center bg-cream min-h-screen w-full pt-16 pb-16 scroll-mt-27"
             >
                 <div className="flex flex-col xl:flex-row w-full px-4 xl:px-12">
                     <div className="w-full xl:w-1/3 flex justify-center content-center xl:ml-12 mb-4 order-last">

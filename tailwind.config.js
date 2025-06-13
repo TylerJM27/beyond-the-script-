@@ -12,6 +12,10 @@ module.exports = {
             fontFamily: {
                 italiana: ["Italiana", "serif"],
             },
+            backgroundImage: {
+                portlandSky:
+                    "url('./src/app/assets/images/portland-skyline.jpg)",
+            },
         },
     },
     plugins: [],
