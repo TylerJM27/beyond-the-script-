@@ -13,7 +13,7 @@ body,
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* Custom cursor */
-    cursor: url("./app/assets/images/theatre-icon.png"), auto;
+    cursor: url("/public/theatre-icon.png") auto;
 }
 
 code {
@@ -27,5 +27,5 @@ a,
 input,
 textarea,
 select {
-    cursor: url("./app/assets/images/theatre-icon.png"), pointer;
+    cursor: url("/public/theatre-icon.png"), pointer;
 }
