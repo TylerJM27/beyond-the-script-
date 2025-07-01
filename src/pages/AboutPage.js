@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform, useInView } from "motion/react";
 import Header from "../components/Header";
 import { Row, Col, Card, CardTitle } from "reactstrap";
 import headshot from "../app/assets/images/headshot.jpg";
-import resumeImage from "../app/assets/images/resume.jpg"; // You'll need to add this image
+import resumeImage from "../app/assets/images/resume.jpg";
 import { WORKS } from "../app/shared/WORKS";
 
 const AboutPage = () => {
@@ -24,8 +24,20 @@ const AboutPage = () => {
     const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
     const [visibleImages, setVisibleImages] = useState([]);
     const [showResume, setShowResume] = useState(false);
+    const [allImagesLoaded, setAllImagesLoaded] = useState(false);
+    const [isPageReady, setIsPageReady] = useState(false);
+
+    // Add smooth page initialization
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsPageReady(true);
+        }, 100);
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
+        if (!isPageReady) return;
+
         const unsubscribe = scrollYProgress.onChange((progress) => {
             const imageCount = Math.floor(progress * WORKS.length * 2);
             const newVisibleImages = [];
@@ -39,46 +51,21 @@ const AboutPage = () => {
             const storyIndex = Math.floor(progress * storyTexts.length);
             setCurrentStoryIndex(Math.min(storyIndex, storyTexts.length - 1));
 
-            // Show resume at 80% scroll progress
-            if (progress > 0.8) {
+            // Show resume at 70% scroll progress, hide if scrolling back up
+            if (progress > 0.7) {
                 setShowResume(true);
+            } else {
+                setShowResume(false);
+            }
+
+            // All images loaded at 60% progress
+            if (progress > 0.6) {
+                setAllImagesLoaded(true);
             }
         });
 
         return unsubscribe;
-    }, [scrollYProgress, storyTexts.length]);
-
-    useEffect(() => {
-        const checkWindowScroll = () => {
-            // Simulate scroll detection for testing (jsdom can't scroll)
-            if (typeof window !== "undefined" && window.scrollY > 5000) {
-                setShowResume(true);
-            }
-        };
-
-        window.addEventListener("scroll", checkWindowScroll);
-
-        return () => {
-            window.removeEventListener("scroll", checkWindowScroll);
-        };
-    }, []);
-
-    useEffect(() => {
-        const testImageTrigger = () => {
-            if (typeof window !== "undefined" && window.scrollY > 1000) {
-                const fallbackImages = [];
-
-                for (let i = 0; i < WORKS.length; i++) {
-                    fallbackImages.push(i);
-                }
-
-                setVisibleImages(fallbackImages);
-            }
-        };
-
-        window.addEventListener("scroll", testImageTrigger);
-        return () => window.removeEventListener("scroll", testImageTrigger);
-    }, []);
+    }, [scrollYProgress, storyTexts.length, isPageReady]);
 
     // Resume animation trigger
     const resumeRef = useRef(null);
@@ -86,7 +73,11 @@ const AboutPage = () => {
     return (
         <div
             ref={containerRef}
-            style={{ height: "400vh", position: "relative" }}
+            style={{
+                height: allImagesLoaded ? "auto" : "400vh",
+                minHeight: allImagesLoaded ? "100vh" : "400vh",
+                position: allImagesLoaded ? "static" : "relative",
+            }}
             className="works-page-background"
         >
             <Header />
@@ -94,12 +85,11 @@ const AboutPage = () => {
             {/* Fixed container for headshot + animated images */}
             <div
                 style={{
-                    position: "fixed",
-                    top: "128px",
+                    position: allImagesLoaded ? "static" : "fixed",
+                    top: allImagesLoaded ? "auto" : "128px",
                     left: 0,
                     width: "100vw",
-                    height: "calc(100vh -8rem)",
-
+                    height: allImagesLoaded ? "auto" : "calc(100vh - 8rem)",
                     pointerEvents: "none",
                     zIndex: 10,
                 }}
@@ -107,14 +97,20 @@ const AboutPage = () => {
             >
                 {/* Headshot + animated images column */}
                 <div
-                    className="flex flex-row h-full md:flex-col order-1 md:order-2 md:grow md:w-1/2 justify-content-center align-items-center pt-32 pb-16 "
+                    className="flex flex-row h-full md:flex-col order-1 md:order-2 md:grow md:w-1/2 justify-content-center align-items-center pt-32 pb-16"
                     style={{
                         position: "relative",
                         zIndex: 50,
                     }}
                 >
                     {/* Headshot */}
-                    <img
+                    <motion.img
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{
+                            opacity: isPageReady ? 1 : 0,
+                            scale: isPageReady ? 1 : 0.8,
+                        }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
                         style={{
                             width: "50%",
                             maxWidth: "550px",
@@ -134,18 +130,19 @@ const AboutPage = () => {
                         <motion.img
                             key={`roll-up-${imageIndex}`}
                             data-testid="roll-up-image"
-                            initial={{ y: "100vh", opacity: 0 }}
+                            initial={{ y: "100vh", opacity: 0, scale: 0.8 }}
                             animate={{
                                 y: `${-i * 50}px`,
                                 opacity: 1,
+                                scale: 1,
                                 x: `${
                                     (i % 2 === 0 ? 1 : -1) * ((i + 1) * 30)
                                 }px`,
                             }}
                             transition={{
-                                duration: 1,
-                                delay: i * 0.2,
-                                ease: "easeOut",
+                                duration: 1.2,
+                                delay: i * 0.15,
+                                ease: [0.25, 0.46, 0.45, 0.94],
                             }}
                             style={{
                                 position: "absolute",
@@ -168,7 +165,7 @@ const AboutPage = () => {
 
                 {/* Story Card Column */}
                 <div
-                    className="flex flex-row: md:flex-col h-full order-2 md:order-1 md:w-1/2 md:flex-grow md:pr-8 justify-content-center align-items-center"
+                    className="flex flex-row md:flex-col h-full order-2 md:order-1 md:w-1/2 md:flex-grow md:pr-8 justify-content-center align-items-center"
                     style={{ zIndex: 2 }}
                 >
                     <Card
@@ -179,16 +176,25 @@ const AboutPage = () => {
                             zIndex: 2,
                         }}
                     >
-                        <CardTitle
-                            tag="h1"
-                            style={{
-                                fontFamily: "Italiana",
-                                fontSize: "calc(2rem + 2vw)",
-                                whiteSpace: "nowrap",
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{
+                                opacity: isPageReady ? 1 : 0,
+                                y: isPageReady ? 0 : 30,
                             }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
                         >
-                            My Story.
-                        </CardTitle>
+                            <CardTitle
+                                tag="h1"
+                                style={{
+                                    fontFamily: "Italiana",
+                                    fontSize: "calc(2rem + 2vw)",
+                                    whiteSpace: "nowrap",
+                                }}
+                            >
+                                My Story.
+                            </CardTitle>
+                        </motion.div>
 
                         <motion.div
                             key={currentStoryIndex}
@@ -196,7 +202,7 @@ const AboutPage = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.8 }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
                             style={{
                                 fontFamily: "Italiana",
                                 textAlign: "center",
@@ -205,87 +211,95 @@ const AboutPage = () => {
                         >
                             {storyTexts[currentStoryIndex]}
                         </motion.div>
-                        {/* Scrollable container for resume and any other content below */}
-                        <div
+                    </Card>
+                </div>
+            </div>
+
+            {/* Resume section - now scrollable when all images loaded */}
+            <div
+                style={{
+                    position: "relative",
+                    marginTop: allImagesLoaded ? "2rem" : "0",
+                    zIndex: 5,
+                    pointerEvents: "auto",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    minHeight: allImagesLoaded ? "50vh" : "auto",
+                }}
+            >
+                <div ref={resumeRef}>
+                    <div className="flex flex-col justify-content-center align-items-center">
+                        <motion.div
+                            data-testid="resume-tilt"
+                            data-tilted={showResume ? "true" : "false"}
+                            initial={{
+                                x: "100vw",
+                                rotate: 0,
+                                scale: 0.5,
+                            }}
+                            animate={
+                                showResume
+                                    ? {
+                                          x: 0,
+                                          rotate: -15,
+                                          scale:
+                                              window.innerWidth < 768 ? 0.7 : 1,
+                                      }
+                                    : {
+                                          x: "100vw",
+                                          rotate: 0,
+                                          scale: 0.5,
+                                      }
+                            }
+                            transition={{
+                                duration: 1.2,
+                                ease: "easeOut",
+                                type: "spring",
+                                stiffness: 100,
+                            }}
+                            whileHover={{
+                                scale: window.innerWidth < 768 ? 0.75 : 1.05,
+                                rotate: -10,
+                                transition: {
+                                    duration: 0.3,
+                                },
+                            }}
+                            whileTap={{
+                                scale: window.innerWidth < 768 ? 0.65 : 0.95,
+                            }}
                             style={{
-                                position: "relative",
-                                marginTop: "10vh",
-                                marginRight: "10vw",
-                                zIndex: 5,
-                                pointerEvents: "auto",
+                                cursor: "pointer",
+                                transformOrigin: "center center",
+                            }}
+                            onClick={() => {
+                                window.open(
+                                    "https://drive.google.com/file/d/1ywHH6eIPudFVFxAi2lG6ZuRPHDiGL7KA/view?usp=sharing",
+                                    "_blank",
+                                    "noopener,noreferrer"
+                                );
                             }}
                         >
-                            {/* Resume section */}
-
-                            <div ref={resumeRef}>
-                                <div className="flex flex-col justify-content-center align-items-center">
-                                    <motion.div
-                                        data-testid="resume-tilt"
-                                        data-tilted={
-                                            showResume ? "true" : "false"
-                                        }
-                                        initial={{
-                                            x: "100vw",
-                                            rotate: 0,
-                                            scale: 0.5,
-                                        }}
-                                        animate={
-                                            showResume
-                                                ? {
-                                                      x: 0,
-                                                      rotate: -15,
-                                                      scale: 1,
-                                                  }
-                                                : {
-                                                      x: "100vw",
-                                                      rotate: 0,
-                                                      scale: 0.5,
-                                                  } // Explicit reset position
-                                        }
-                                        transition={{
-                                            duration: 1.2,
-                                            ease: "easeOut",
-                                            type: "spring",
-                                            stiffness: 100,
-                                        }}
-                                        whileHover={{
-                                            scale: 1.05,
-                                            rotate: -10,
-                                            transition: {
-                                                duration: 0.3,
-                                            },
-                                        }}
-                                        whileTap={{ scale: 0.95 }}
-                                        style={{
-                                            cursor: "pointer",
-                                            transformOrigin: "center center",
-                                        }}
-                                        onClick={() => {
-                                            window.open(
-                                                "https://drive.google.com/file/d/1ywHH6eIPudFVFxAi2lG6ZuRPHDiGL7KA/view?usp=sharing",
-                                                "_blank",
-                                                "noopener,noreferrer"
-                                            );
-                                        }}
-                                    >
-                                        <img
-                                            src={resumeImage}
-                                            alt="Resume"
-                                            style={{
-                                                width: "300px",
-                                                height: "400px",
-                                                objectFit: "cover",
-                                                borderRadius: "10px",
-                                                boxShadow:
-                                                    "0 20px 40px rgba(0,0,0,0.3)",
-                                                border: "3px solid #e98074",
-                                            }}
-                                        />
-                                    </motion.div>
-                                </div>
-                            </div>
-                        </div>
-                    </Card>
+                            <img
+                                src={resumeImage}
+                                alt="Resume"
+                                style={{
+                                    width:
+                                        window.innerWidth < 768
+                                            ? "200px"
+                                            : "300px",
+                                    height:
+                                        window.innerWidth < 768
+                                            ? "267px"
+                                            : "400px",
+                                    objectFit: "cover",
+                                    borderRadius: "10px",
+                                    boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+                                    border: "3px solid #e98074",
+                                }}
+                            />
+                        </motion.div>
+                    </div>
                 </div>
             </div>
         </div>

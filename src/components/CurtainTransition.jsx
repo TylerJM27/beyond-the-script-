@@ -1,26 +1,32 @@
 import { motion } from "motion/react";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import redCurtain from "../app/assets/images/red-curtain.jpg";
 
 const CurtainTransition = ({ children }) => {
     const location = useLocation();
     const [isAnimating, setIsAnimating] = useState(true);
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
 
     useEffect(() => {
+        // Reset scroll position on route change
+        window.scrollTo(0, 0);
+
         setIsAnimating(true);
         const timer = setTimeout(() => {
             setIsAnimating(false);
-        }, 1000); // Match timing to your curtain open duration
+            setIsInitialLoad(false);
+        }, 1000);
 
         return () => clearTimeout(timer);
-    }, [location.pathname]); // <- re-run animation on every route change
+    }, [location.pathname]);
 
     return (
         <>
             {/* Left Curtain */}
             <motion.div
                 data-testid="curtain-left"
-                initial={{ x: "-100%" }}
+                initial={{ x: isInitialLoad ? "0%" : "-100%" }}
                 animate={{ x: isAnimating ? "0%" : "-100%" }}
                 transition={{ duration: 0.8, ease: "easeInOut" }}
                 style={{
@@ -29,7 +35,9 @@ const CurtainTransition = ({ children }) => {
                     left: 0,
                     width: "50%",
                     height: "100vh",
-                    backgroundColor: "#8B0000",
+                    backgroundImage: `url(${redCurtain})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center right",
                     zIndex: 9999,
                 }}
             />
@@ -37,7 +45,7 @@ const CurtainTransition = ({ children }) => {
             {/* Right Curtain */}
             <motion.div
                 data-testid="curtain-right"
-                initial={{ x: "100%" }}
+                initial={{ x: isInitialLoad ? "0%" : "100%" }}
                 animate={{ x: isAnimating ? "0%" : "100%" }}
                 transition={{ duration: 0.8, ease: "easeInOut" }}
                 style={{
@@ -46,17 +54,19 @@ const CurtainTransition = ({ children }) => {
                     right: 0,
                     width: "50%",
                     height: "100vh",
-                    backgroundColor: "#8B0000",
+                    backgroundImage: `url(${redCurtain})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center left",
                     zIndex: 9999,
                 }}
             />
 
-            {/* Page Content */}
+            {/* Page Content - always visible behind curtain */}
             <motion.div
-                key={location.pathname} // ensures content re-renders per route
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isAnimating ? 0 : 1 }}
-                transition={{ duration: 0.5, delay: 0.8 }}
+                key={location.pathname}
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+                style={{ position: "relative", zIndex: 1 }}
             >
                 {children}
             </motion.div>
