@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
     content: ["./src/**/*.{js,jsx,ts,tsx}"],
     theme: {
         extend: {
@@ -15,6 +15,9 @@ module.exports = {
             backgroundImage: {
                 portlandSky:
                     "url('./src/app/assets/images/portland-skyline.jpg)",
+            },
+            screens: {
+                "3xl": "1800px",
             },
         },
     },
