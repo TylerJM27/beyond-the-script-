@@ -1,24 +1,24 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "motion/react";
+import { motion, useScroll } from "motion/react";
 import Header from "../components/Header";
-import { Row, Col, Card, CardTitle } from "reactstrap";
+import { Card, CardTitle } from "reactstrap";
 import headshot from "../app/assets/images/headshot.jpg";
 import resumeImage from "../app/assets/images/resume.jpg";
 import { WORKS } from "../app/shared/WORKS";
 
 const AboutPage = () => {
     const containerRef = useRef(null);
+    const resumeRef = useRef(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end end"],
     });
 
-    // Story text variations
     const storyTexts = [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur natus rem expedita vitae consequuntur quae aliquam, saepe eligendi magni eos officia maxime ipsum numquam necessitatibus, nobis voluptates ad omnis dolores quam itaque consequatur!",
-        "Neque mollitia similique delectus modi odio quaerat tempore iusto nobis asperiores! Fugit suscipit aliquid dignissimos at adipisci qui repellendus esse inventore voluptatem sequi sed cupiditate asperiores minima nesciunt, dolorum iure.",
-        "Officiis ratione doloribus quasi soluta, ea enim optio minima suscipit cumque natus qui consectetur vitae error, possimus eius praesentium fugit aspernatur! Voluptate minus recusandae blanditiis nobis quaerat officiis, veritatis molestias odit labore ipsa minima ex aliquid velit?",
-        "Final story text that appears as the user continues scrolling through the beautiful portfolio of artistic works and creative endeavors that showcase the depth and breadth of artistic expression.",
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit...",
+        "Neque mollitia similique delectus modi odio quaerat...",
+        "Officiis ratione doloribus quasi soluta, ea enim optio...",
+        "Final story text that appears as the user continues scrolling...",
     ];
 
     const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
@@ -26,15 +26,15 @@ const AboutPage = () => {
     const [showResume, setShowResume] = useState(false);
     const [allImagesLoaded, setAllImagesLoaded] = useState(false);
     const [isPageReady, setIsPageReady] = useState(false);
+    const [readyForLayoutChange, setReadyForLayoutChange] = useState(false);
 
-    // Add smooth page initialization
+    // Smooth page initialization
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsPageReady(true);
-        }, 100);
+        const timer = setTimeout(() => setIsPageReady(true), 100);
         return () => clearTimeout(timer);
     }, []);
 
+    // Scroll-driven animation logic
     useEffect(() => {
         if (!isPageReady) return;
 
@@ -46,37 +46,51 @@ const AboutPage = () => {
                 newVisibleImages.push(i);
             }
 
-            setVisibleImages(newVisibleImages);
+            // Only update if different
+            setVisibleImages((prev) => {
+                const last = prev[prev.length - 1] ?? -1;
+                if (
+                    newVisibleImages.length !== prev.length ||
+                    last !== newVisibleImages[newVisibleImages.length - 1]
+                ) {
+                    return newVisibleImages;
+                }
+                return prev;
+            });
 
             const storyIndex = Math.floor(progress * storyTexts.length);
             setCurrentStoryIndex(Math.min(storyIndex, storyTexts.length - 1));
 
-            // Show resume at 70% scroll progress, hide if scrolling back up
-            if (progress > 0.7) {
-                setShowResume(true);
-            } else {
-                setShowResume(false);
-            }
-
-            // All images loaded at 60% progress
-            if (progress > 0.6) {
-                setAllImagesLoaded(true);
-            }
+            setShowResume(progress > 0.8);
+            setAllImagesLoaded(progress > 0.6);
         });
 
         return unsubscribe;
-    }, [scrollYProgress, storyTexts.length, isPageReady]);
+    }, [scrollYProgress, isPageReady, storyTexts.length]);
 
-    // Resume animation trigger
-    const resumeRef = useRef(null);
+    // Delay layout change to avoid scroll snap
+    useEffect(() => {
+        if (allImagesLoaded) {
+            const timer = setTimeout(() => {
+                setReadyForLayoutChange(true);
+                if (resumeRef.current) {
+                    resumeRef.current.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                    });
+                }
+            }, 600); // delay long enough for animations to finish
+            return () => clearTimeout(timer);
+        }
+    }, [allImagesLoaded]);
 
     return (
         <div
             ref={containerRef}
             style={{
-                height: allImagesLoaded ? "auto" : "400vh",
-                minHeight: allImagesLoaded ? "100vh" : "400vh",
-                position: allImagesLoaded ? "static" : "relative",
+                height: readyForLayoutChange ? "auto" : "400vh",
+                minHeight: readyForLayoutChange ? "75vh" : "400vh",
+                position: readyForLayoutChange ? "static" : "relative",
             }}
             className="works-page-background"
         >
@@ -85,25 +99,23 @@ const AboutPage = () => {
             {/* Fixed container for headshot + animated images */}
             <div
                 style={{
-                    position: allImagesLoaded ? "static" : "fixed",
-                    top: allImagesLoaded ? "auto" : "128px",
+                    position: readyForLayoutChange ? "static" : "fixed",
+                    top: readyForLayoutChange ? "auto" : "128px",
                     left: 0,
                     width: "100vw",
-                    height: allImagesLoaded ? "auto" : "calc(100vh - 8rem)",
+                    height: readyForLayoutChange
+                        ? "auto"
+                        : "calc(100vh - 8rem)",
                     pointerEvents: "none",
                     zIndex: 10,
                 }}
                 className="flex flex-col md:flex-row items-center justify-center"
             >
-                {/* Headshot + animated images column */}
+                {/* Image column */}
                 <div
                     className="flex flex-row h-full md:flex-col order-1 md:order-2 md:grow md:w-1/2 justify-content-center align-items-center pt-32 pb-16"
-                    style={{
-                        position: "relative",
-                        zIndex: 50,
-                    }}
+                    style={{ position: "relative", zIndex: 50 }}
                 >
-                    {/* Headshot */}
                     <motion.img
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{
@@ -125,7 +137,6 @@ const AboutPage = () => {
                         alt="Actor Headshot"
                     />
 
-                    {/* Animated WORKS images */}
                     {visibleImages.map((imageIndex, i) => (
                         <motion.img
                             key={`roll-up-${imageIndex}`}
@@ -163,9 +174,9 @@ const AboutPage = () => {
                     ))}
                 </div>
 
-                {/* Story Card Column */}
+                {/* Story card column */}
                 <div
-                    className="flex flex-row md:flex-col h-full order-2 md:order-1 md:w-1/2 md:flex-grow md:pr-8 justify-content-center align-items-center"
+                    className="flex flex-row md:flex-col h-full order-2 md:order-1 md:w-1/2 md:flex-grow md:pr-8 justify-content-center align-items-center ml-20 md:ml-0 md:pr-20"
                     style={{ zIndex: 2 }}
                 >
                     <Card
@@ -215,21 +226,20 @@ const AboutPage = () => {
                 </div>
             </div>
 
-            {/* Resume section - now scrollable when all images loaded */}
+            {/* Resume section */}
             <div
                 style={{
                     position: "relative",
-                    marginTop: allImagesLoaded ? "2rem" : "0",
                     zIndex: 5,
                     pointerEvents: "auto",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    minHeight: allImagesLoaded ? "50vh" : "auto",
+                    minHeight: readyForLayoutChange ? "50vh" : "0vh",
                 }}
             >
                 <div ref={resumeRef}>
-                    <div className="flex flex-col justify-content-center align-items-center">
+                    <div className="flex flex-row justify-content-center align-items-center">
                         <motion.div
                             data-testid="resume-tilt"
                             data-tilted={showResume ? "true" : "false"}
@@ -253,10 +263,10 @@ const AboutPage = () => {
                                       }
                             }
                             transition={{
-                                duration: 1.2,
+                                duration: 5,
                                 ease: "easeOut",
                                 type: "spring",
-                                stiffness: 100,
+                                stiffness: 50,
                             }}
                             whileHover={{
                                 scale: window.innerWidth < 768 ? 0.75 : 1.05,

@@ -8,10 +8,17 @@ import {
     NavItem,
     Container,
 } from "reactstrap";
-import { NavLink } from "react-router-dom";
+import { useCurtain } from "../features/CurtainContext";
 
 const NavbarToggle = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const { triggerCurtainTransition } = useCurtain();
+
+    const handleNavClick = (e, path) => {
+        e.preventDefault();
+        setMenuOpen(false);
+        triggerCurtainTransition(path);
+    };
 
     return (
         <Container className="navbar-container" style={{ padding: "0" }}>
@@ -26,29 +33,49 @@ const NavbarToggle = () => {
                 <Collapse isOpen={menuOpen} navbar className="custom-collapse">
                     <Nav className="ms-auto" navbar>
                         <NavItem>
-                            <NavLink className="nav-link" to="/">
+                            <a
+                                className="nav-link"
+                                href="/"
+                                onClick={(e) => handleNavClick(e, "/")}
+                            >
                                 Home
-                            </NavLink>
+                            </a>
                         </NavItem>
                         <NavItem>
-                            <NavLink className="nav-link" to="/works">
+                            <a
+                                className="nav-link"
+                                href="/works"
+                                onClick={(e) => handleNavClick(e, "/works")}
+                            >
                                 Works
-                            </NavLink>
+                            </a>
                         </NavItem>
                         <NavItem>
-                            <NavLink className="nav-link" to="/projects">
+                            <a
+                                className="nav-link"
+                                href="/projects"
+                                onClick={(e) => handleNavClick(e, "/projects")}
+                            >
                                 Projects
-                            </NavLink>
+                            </a>
                         </NavItem>
                         <NavItem>
-                            <NavLink className="nav-link" to="/about">
+                            <a
+                                className="nav-link"
+                                href="/about"
+                                onClick={(e) => handleNavClick(e, "/about")}
+                            >
                                 About
-                            </NavLink>
+                            </a>
                         </NavItem>
                         <NavItem>
-                            <NavLink className="nav-link" to="/contact">
+                            <a
+                                className="nav-link"
+                                href="/contact"
+                                onClick={(e) => handleNavClick(e, "/contact")}
+                            >
                                 Contact
-                            </NavLink>
+                            </a>
                         </NavItem>
                     </Nav>
                 </Collapse>
