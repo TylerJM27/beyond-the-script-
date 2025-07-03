@@ -1,6 +1,6 @@
 // src/pages/AboutPage.js
 import { useState, useEffect, useRef } from "react";
-import { motion, useScroll } from "motion/react";
+import { motion, useScroll, AnimatePresence } from "motion/react";
 import Header from "../components/Header";
 import { Card, CardTitle } from "reactstrap";
 import headshot from "../app/assets/images/headshot.jpg";
@@ -12,14 +12,15 @@ const AboutPage = () => {
     const resumeRef = useRef(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
-        offset: ["start end", "end end"],
+        offset: ["start start", "end end"],
     });
+    const lastScrollY = useRef(0);
 
     const storyTexts = [
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit...",
-        "Neque mollitia similique delectus modi odio quaerat...",
-        "Officiis ratione doloribus quasi soluta, ea enim optio...",
-        "Final story text that appears as the user continues scrolling...",
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque laudantium ducimus vitae, soluta reiciendis exercitationem delectus consectetur sapiente labore! Natus tempore neque nam consequuntur facilis?",
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque laudantium ducimus vitae, soluta reiciendis exercitationem delectus consectetur sapiente labore! Natus tempore neque nam consequuntur facilis?",
+        "Officiis ratione Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque laudantium ducimus vitae, soluta reiciendis exercitationem delectus consectetur sapiente labore! Natus tempore neque nam consequuntur facilis?",
+        "Final story text that appears Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque laudantium ducimus vitae, soluta reiciendis exercitationem delectus consectetur sapiente labore! Natus tempore neque nam consequuntur facilis?",
     ];
 
     const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
@@ -52,6 +53,9 @@ const AboutPage = () => {
         if (!isPageReady) return;
 
         const unsubscribe = scrollYProgress.onChange((progress) => {
+            // Store the last scrollY for future restoration
+            lastScrollY.current = window.scrollY;
+
             // Bidirectional image visibility
             const imageCount = Math.floor(progress * WORKS.length * 2);
             const newVisibleImages = [];
@@ -101,7 +105,14 @@ const AboutPage = () => {
     // Reset layout change when scrolling back up on mobile
     useEffect(() => {
         if (isMobile && !allImagesLoaded && readyForLayoutChange) {
-            setReadyForLayoutChange(false);
+            const timer = setTimeout(() => {
+                setReadyForLayoutChange(false);
+
+                // ✅ NO scrollTo — let the user remain where they are
+                // Fixed layout reengages, scroll stays at bottom of 400vh
+            }, 0);
+
+            return () => clearTimeout(timer);
         }
     }, [allImagesLoaded, isMobile, readyForLayoutChange]);
 
@@ -132,28 +143,22 @@ const AboutPage = () => {
                     pointerEvents: "none",
                     zIndex: 10,
                 }}
-                className="flex flex-col items-center justify-center"
+                className="flex flex-col items-center justify-center overflow-x-hidden"
             >
                 {/* Desktop layout: side by side with resume below */}
-                <div className="hidden md:flex md:flex-row md:items-start md:justify-center md:w-full md:h-full md:pt-8">
-                    {/* Story card column - left side on desktop */}
-                    <div className="flex flex-col justify-center items-center w-1/2 pr-8 h-full">
-                        <Card className="bg-cream border-0 relative z-[2] mb-8">
-                            <motion.div
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{
-                                    opacity: isPageReady ? 1 : 0,
-                                    y: isPageReady ? 0 : 30,
-                                }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
+                <div className="hidden bg-cream md:flex md:flex-row md:items-start md:justify-center md:w-full md:h-full md:pt-8 ">
+                    {/* Story card column - right side on desktop */}
+                    <div className="flex bg-cream flex-col md:order-2 justify-center items-center w-1/2 pr-20 h-full">
+                        <Card
+                            className="border-0 relative z-[2] mb-8"
+                            style={{ backgroundColor: "#eae7dc" }}
+                        >
+                            <CardTitle
+                                tag="h1"
+                                className="font-italiana bg-cream text-4xl lg:text-5xl xl:text-6xl whitespace-nowrap mb-3"
                             >
-                                <CardTitle
-                                    tag="h1"
-                                    className="font-italiana text-4xl lg:text-5xl xl:text-6xl whitespace-nowrap"
-                                >
-                                    My Story.
-                                </CardTitle>
-                            </motion.div>
+                                My Story.
+                            </CardTitle>
 
                             <motion.div
                                 key={currentStoryIndex}
@@ -161,15 +166,16 @@ const AboutPage = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
-                                transition={{ duration: 0.8, ease: "easeOut" }}
-                                className="font-italiana text-center mr-12"
+                                transition={{ duration: 0.6, ease: "easeOut" }}
+                                className="font-italiana bg-cream text-center "
+                                style={{ backgroundColor: "#eae7dc" }}
                             >
                                 {storyTexts[currentStoryIndex]}
                             </motion.div>
                         </Card>
 
                         {/* Resume section - below story on desktop */}
-                        <div className="flex justify-center items-center mt-8">
+                        <div className="flex justify-center items-center mt-8 ">
                             <motion.div
                                 data-testid="resume-tilt"
                                 data-tilted={showResume ? "true" : "false"}
@@ -183,7 +189,7 @@ const AboutPage = () => {
                                     showResume
                                         ? {
                                               x: 0,
-                                              rotate: -15,
+                                              rotate: -380,
                                               scale: 1,
                                               opacity: 1,
                                           }
@@ -195,13 +201,13 @@ const AboutPage = () => {
                                           }
                                 }
                                 transition={{
-                                    duration: 1.2,
+                                    duration: 1,
                                     ease: "easeOut",
                                     type: "spring",
                                     stiffness: 50,
                                 }}
                                 whileHover={{
-                                    scale: 1.05,
+                                    scale: 1.08,
                                     rotate: -10,
                                     transition: {
                                         duration: 0.3,
@@ -236,7 +242,7 @@ const AboutPage = () => {
                         </div>
                     </div>
 
-                    {/* Image column - right side on desktop */}
+                    {/* Image column - left side on desktop */}
                     <div className="flex flex-col justify-center items-center w-1/2 h-full relative z-[50]">
                         <motion.img
                             initial={{ opacity: 0, scale: 0.8 }}
@@ -244,39 +250,53 @@ const AboutPage = () => {
                                 opacity: isPageReady ? 1 : 0,
                                 scale: isPageReady ? 1 : 0.8,
                             }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
                             className="w-1/2 max-w-[550px] min-w-[250px] h-auto aspect-square object-cover rounded-full border-[5px] border-salmon"
                             src={headshot}
                             alt="Actor Headshot"
                         />
 
-                        {visibleImages.map((imageIndex, i) => (
-                            <motion.img
-                                key={`roll-up-${imageIndex}`}
-                                data-testid="roll-up-image"
-                                initial={{ y: "100vh", opacity: 0, scale: 0.8 }}
-                                animate={{
-                                    y: `${-i * 50}px`,
-                                    opacity: 1,
-                                    scale: 1,
-                                    x: `${
-                                        (i % 2 === 0 ? 1 : -1) * ((i + 1) * 30)
-                                    }px`,
-                                }}
-                                transition={{
-                                    duration: 1.2,
-                                    delay: i * 0.15,
-                                    ease: [0.25, 0.46, 0.45, 0.94],
-                                }}
-                                className="absolute w-1/2 max-w-[550px] min-w-[250px] h-auto aspect-square object-cover rounded-full border-[5px] border-salmon"
-                                style={{
-                                    zIndex: 100 + i,
-                                    boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
-                                }}
-                                src={WORKS[imageIndex].image}
-                                alt={WORKS[imageIndex].altText}
-                            />
-                        ))}
+                        <AnimatePresence mode="sync">
+                            {visibleImages.map((imageIndex, i) => (
+                                <motion.img
+                                    key={`roll-up-${imageIndex}`}
+                                    data-testid="roll-up-image"
+                                    initial={{
+                                        y: "100vh",
+                                        opacity: 0,
+                                        scale: 0.8,
+                                    }}
+                                    animate={{
+                                        y: `${-i * 50}px`,
+                                        opacity: 1,
+                                        scale: 1,
+                                        x: `${
+                                            (i % 2 === 0 ? 1 : -1) *
+                                            ((i + 1) * 30)
+                                        }px`,
+                                    }}
+                                    exit={{
+                                        opacity: 0,
+                                        y: "100vh",
+                                        scale: 0.8,
+                                        transition: { duration: 0.4 },
+                                    }}
+                                    transition={{
+                                        duration: 0.6,
+                                        delay: i * 0.15,
+                                        ease: [0.25, 0.46, 0.45, 0.94],
+                                    }}
+                                    className="absolute w-1/2 max-w-[550px] min-w-[250px] h-auto aspect-square object-cover rounded-full border-[5px] border-salmon"
+                                    style={{
+                                        zIndex: 100 + i,
+                                        boxShadow:
+                                            "0 10px 30px rgba(0,0,0,0.3)",
+                                    }}
+                                    src={WORKS[imageIndex].image}
+                                    alt={WORKS[imageIndex].altText}
+                                />
+                            ))}
+                        </AnimatePresence>
                     </div>
                 </div>
 
@@ -295,45 +315,65 @@ const AboutPage = () => {
                             alt="Actor Headshot"
                         />
 
-                        {visibleImages.map((imageIndex, i) => (
-                            <motion.img
-                                key={`roll-up-${imageIndex}`}
-                                data-testid="roll-up-image"
-                                initial={{ y: "100vh", opacity: 0, scale: 0.8 }}
-                                animate={{
-                                    y: `${-i * 50}px`,
-                                    opacity: 1,
-                                    scale: 1,
-                                    x: `${
-                                        (i % 2 === 0 ? 1 : -1) * ((i + 1) * 30)
-                                    }px`,
-                                }}
-                                transition={{
-                                    duration: 1.2,
-                                    delay: i * 0.15,
-                                    ease: [0.25, 0.46, 0.45, 0.94],
-                                }}
-                                className="absolute w-1/2 max-w-[550px] min-w-[250px] h-auto aspect-square object-cover rounded-full border-[5px] border-salmon"
-                                style={{
-                                    zIndex: 100 + i,
-                                    boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
-                                }}
-                                src={WORKS[imageIndex].image}
-                                alt={WORKS[imageIndex].altText}
-                            />
-                        ))}
+                        <AnimatePresence mode="sync">
+                            {visibleImages.map((imageIndex, i) => (
+                                <motion.img
+                                    key={`roll-up-${imageIndex}`}
+                                    data-testid="roll-up-image"
+                                    initial={{
+                                        y: "100vh",
+                                        opacity: 0,
+                                        scale: 0.8,
+                                    }}
+                                    animate={{
+                                        y: `${-i * 50}px`,
+                                        opacity: 1,
+                                        scale: 1,
+                                        x: `${
+                                            (i % 2 === 0 ? 1 : -1) *
+                                            ((i + 1) * 30)
+                                        }px`,
+                                    }}
+                                    exit={{
+                                        opacity: 0,
+                                        y: "100vh",
+                                        scale: 0.8,
+                                        transition: { duration: 0.4 },
+                                    }}
+                                    transition={{
+                                        duration: 0.6,
+                                        delay: i * 0.15,
+                                        ease: [0.25, 0.46, 0.45, 0.94],
+                                    }}
+                                    className="absolute w-1/2 max-w-[550px] min-w-[250px] h-auto aspect-square object-cover rounded-full border-[5px] border-salmon"
+                                    style={{
+                                        zIndex: 100 + i,
+                                        boxShadow:
+                                            "0 10px 30px rgba(0,0,0,0.3)",
+                                    }}
+                                    src={WORKS[imageIndex].image}
+                                    alt={WORKS[imageIndex].altText}
+                                />
+                            ))}
+                        </AnimatePresence>
                     </div>
 
                     {/* Story card column - mobile */}
-                    <div className="flex flex-row h-full order-2 justify-center items-center ml-20 z-[2]">
-                        <Card className="bg-cream border-0 relative z-[2]">
+                    <div
+                        className="flex flex-col h-full order-1 justify-center items-center ml-20 z-[2]"
+                        style={{ backgroundColor: "#eae7dc" }}
+                    >
+                        <Card
+                            className="bg-cream border-0 relative z-[2]"
+                            style={{ backgroundColor: "#eae7dc" }}
+                        >
                             <motion.div
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{
                                     opacity: isPageReady ? 1 : 0,
                                     y: isPageReady ? 0 : 30,
                                 }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
+                                transition={{ duration: 0.6, delay: 0.2 }}
                             >
                                 <CardTitle
                                     tag="h1"
@@ -375,6 +415,7 @@ const AboutPage = () => {
                         alignItems: "center",
                         minHeight: readyForLayoutChange ? "50vh" : "0vh",
                     }}
+                    className="flex flex-col order-2 overflow-x-hidden"
                 >
                     <div ref={resumeRef}>
                         <div className="flex flex-row justify-center items-center">
@@ -385,26 +426,39 @@ const AboutPage = () => {
                                     x: "100vw",
                                     rotate: 0,
                                     scale: 0.5,
+                                    opacity: 0,
                                 }}
                                 animate={
                                     showResume
                                         ? {
                                               x: 0,
-                                              rotate: -15,
-                                              scale: 0.7,
+                                              rotate: -380,
+                                              scale: 0.9,
+                                              opacity: 1,
                                           }
                                         : {
                                               x: "100vw",
                                               rotate: 0,
                                               scale: 0.5,
+                                              opacity: 0,
                                           }
                                 }
-                                transition={{
-                                    duration: 5,
-                                    ease: "easeOut",
-                                    type: "spring",
-                                    stiffness: 50,
-                                }}
+                                transition={
+                                    showResume
+                                        ? {
+                                              delay: 2,
+                                              duration: 5,
+                                              ease: "easeOut",
+                                              type: "spring",
+                                              stiffness: 50,
+                                          }
+                                        : {
+                                              duration: 0,
+                                              ease: "easeOut",
+                                              type: "spring",
+                                              stiffness: 50,
+                                          }
+                                }
                                 whileHover={{
                                     scale: 0.75,
                                     rotate: -10,
