@@ -1,34 +1,39 @@
 import Header from "../components/Header";
-import { motion } from "framer-motion";
+import { motion, Variants } from "motion/react";
 import { useState, useEffect } from "react";
 import directing1 from "../app/assets/images/directing1.jpg";
+
+const draw = {
+    hidden: { pathLength: 0, opacity: 0 },
+    visible: (i) => {
+        const delay = i * 0.9 + 2;
+        return {
+            pathLength: 1,
+            opacity: 1,
+            transition: {
+                pathLength: { delay, type: "spring", duration: 1.6, bounce: 0 },
+                opacity: { delay, duration: 0.03 },
+            },
+        };
+    },
+};
+
+const textVariants = {
+    hidden: { opacity: 0 },
+    visible: (i) => ({
+        opacity: 1,
+        transition: { delay: 6 },
+    }),
+};
 
 const ContactPage = () => {
     const [imageLoaded, setImageLoaded] = useState(false);
 
     useEffect(() => {
         const img = new Image();
-        img.onload = () => {
-            setImageLoaded(true);
-        };
+        img.onload = () => setImageLoaded(true);
         img.src = directing1;
     }, []);
-
-    const lineVariants = {
-        hidden: { pathLength: 0 },
-        visible: {
-            pathLength: 1,
-            transition: { duration: 0.8, ease: "easeInOut" },
-        },
-    };
-
-    const textVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { duration: 0.6, ease: "easeInOut" },
-        },
-    };
 
     return (
         <div className="min-h-screen bg-cream">
@@ -56,132 +61,95 @@ const ContactPage = () => {
                         </p>
 
                         <form className="font-italiana w-full max-w-lg flex flex-col gap-8">
-                            <h2 className="font-italiana text-2xl font-semibold text-gray-800 mb-2">
+                            <h2 className="text-2xl font-semibold text-gray-800 mb-2">
                                 Email me
                             </h2>
 
-                            {/* Email Field */}
-                            <div className="relative">
-                                <input
-                                    type="email"
-                                    placeholder="Your Email"
-                                    name="from_email"
-                                    className="w-full bg-transparent outline-none text-lg text-gray-800 pb-2 placeholder-transparent peer"
-                                />
-                                <motion.label
-                                    className="absolute left-0 top-0 text-lg text-gray-600 pointer-events-none transition-all peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg peer-focus:-top-6 peer-focus:text-sm peer-focus:text-salmon"
-                                    variants={textVariants}
-                                    initial="hidden"
-                                    animate={imageLoaded ? "visible" : "hidden"}
-                                    transition={{ delay: 3.2 }}
-                                >
-                                    Your Email
-                                </motion.label>
-                                <svg
-                                    className="absolute bottom-0 left-0 w-full h-0.5"
-                                    viewBox="0 0 100 1"
-                                >
-                                    <motion.path
-                                        d="M0,0.5 L100,0.5"
-                                        stroke="#e98074"
-                                        strokeWidth="1"
-                                        fill="none"
-                                        variants={lineVariants}
+                            {/* Input Fields */}
+                            {[
+                                {
+                                    label: "Email",
+                                    name: "from_email",
+                                    type: "email",
+                                    custom: 0,
+                                },
+                                {
+                                    label: "Name",
+                                    name: "from_name",
+                                    type: "text",
+                                    custom: 1,
+                                },
+                                {
+                                    label: "Subject",
+                                    name: "title",
+                                    type: "text",
+                                    custom: 2,
+                                },
+                            ].map((field) => (
+                                <div key={field.name} className="relative">
+                                    <input
+                                        type={field.type}
+                                        name={"field.name"}
+                                        placeholder={""}
+                                        className="w-full bg-transparent outline-none text-lg text-gray-800 pb-2 
+                                                   placeholder-gray-400 placeholder-opacity-100 peer 
+                                                   peer-placeholder-shown:opacity-100 peer-focus:opacity-0 transition-opacity"
+                                    />
+                                    <motion.label
+                                        className="absolute left-0 top-0 text-lg text-gray-600 pointer-events-none transition-all 
+                                                   peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg 
+                                                   peer-focus:opacity-0 peer-focus:invisible peer-focus:text-sm peer-focus:text-salmon"
+                                        variants={textVariants}
                                         initial="hidden"
                                         animate={
                                             imageLoaded ? "visible" : "hidden"
                                         }
-                                        transition={{ delay: 0.5 }}
-                                    />
-                                </svg>
-                            </div>
-
-                            {/* Name Field */}
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder="Your Name"
-                                    name="from_name"
-                                    className="w-full bg-transparent outline-none text-lg text-gray-800 pb-2 placeholder-transparent peer"
-                                />
-                                <motion.label
-                                    className="absolute left-0 top-0 text-lg text-gray-600 pointer-events-none transition-all peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg peer-focus:-top-6 peer-focus:text-sm peer-focus:text-salmon"
-                                    variants={textVariants}
-                                    initial="hidden"
-                                    animate={imageLoaded ? "visible" : "hidden"}
-                                    transition={{ delay: 3.4 }}
-                                >
-                                    Your Name
-                                </motion.label>
-                                <svg
-                                    className="absolute bottom-0 left-0 w-full h-0.5"
-                                    viewBox="0 0 100 1"
-                                >
-                                    <motion.path
-                                        d="M0,0.5 L100,0.5"
-                                        stroke="#e98074"
-                                        strokeWidth="1"
-                                        fill="none"
-                                        variants={lineVariants}
-                                        initial="hidden"
-                                        animate={
-                                            imageLoaded ? "visible" : "hidden"
-                                        }
-                                        transition={{ delay: 1.3 }}
-                                    />
-                                </svg>
-                            </div>
-
-                            {/* Subject Field */}
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder="Subject"
-                                    name="title"
-                                    className="w-full bg-transparent outline-none text-lg text-gray-800 pb-2 placeholder-transparent peer"
-                                />
-                                <motion.label
-                                    className="absolute left-0 top-0 text-lg text-gray-600 pointer-events-none transition-all peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg peer-focus:-top-6 peer-focus:text-sm peer-focus:text-salmon"
-                                    variants={textVariants}
-                                    initial="hidden"
-                                    animate={imageLoaded ? "visible" : "hidden"}
-                                    transition={{ delay: 3.6 }}
-                                >
-                                    Subject
-                                </motion.label>
-                                <svg
-                                    className="absolute bottom-0 left-0 w-full h-0.5"
-                                    viewBox="0 0 100 1"
-                                >
-                                    <motion.path
-                                        d="M0,0.5 L100,0.5"
-                                        stroke="#e98074"
-                                        strokeWidth="1"
-                                        fill="none"
-                                        variants={lineVariants}
-                                        initial="hidden"
-                                        animate={
-                                            imageLoaded ? "visible" : "hidden"
-                                        }
-                                        transition={{ delay: 2.1 }}
-                                    />
-                                </svg>
-                            </div>
+                                        custom={field.custom}
+                                    >
+                                        {field.label}
+                                    </motion.label>
+                                    <motion.svg
+                                        className="absolute bottom-0 left-0 w-full h-0.5"
+                                        viewBox="0 0 100 1"
+                                    >
+                                        <motion.line
+                                            x1="-100"
+                                            y1="0.5"
+                                            x2="100"
+                                            y2="0.5"
+                                            stroke="#e98074"
+                                            strokeWidth="2"
+                                            variants={draw}
+                                            initial="hidden"
+                                            animate={
+                                                imageLoaded
+                                                    ? "visible"
+                                                    : "hidden"
+                                            }
+                                            custom={field.custom}
+                                        />
+                                    </motion.svg>
+                                </div>
+                            ))}
 
                             {/* Message Field */}
                             <div className="relative">
                                 <textarea
-                                    placeholder="Message"
-                                    rows="4"
                                     name="message"
-                                    className="w-full bg-transparent outline-none text-lg text-gray-800 pb-2 placeholder-transparent peer resize-none"
+                                    placeholder=""
+                                    rows="4"
+                                    className="w-full bg-transparent outline-none text-lg text-gray-800 pb-2 
+                                               placeholder-gray-400 placeholder-opacity-100 peer 
+                                               peer-placeholder-shown:opacity-100 peer-focus:opacity-0 transition-opacity resize-none"
                                 />
                                 <motion.label
-                                    className="absolute left-0 top-0 text-lg text-gray-600 pointer-events-none transition-all peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg peer-focus:-top-6 peer-focus:text-sm peer-focus:text-salmon"
+                                    className="absolute left-0 top-0 text-lg text-gray-600 pointer-events-none transition-all 
+                                               peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg 
+                                               peer-focus:-top-6 peer-focus:text-sm peer-focus:text-salmon"
                                     variants={textVariants}
                                     initial="hidden"
                                     animate={imageLoaded ? "visible" : "hidden"}
-                                    transition={{ delay: 3.8 }}
+                                    custom={3}
                                 >
                                     Message
                                 </motion.label>
@@ -189,24 +157,30 @@ const ContactPage = () => {
                                     className="absolute bottom-0 left-0 w-full h-0.5"
                                     viewBox="0 0 100 1"
                                 >
-                                    <motion.path
-                                        d="M0,0.5 L100,0.5"
+                                    <motion.line
+                                        x1="-100"
+                                        y1="0.5"
+                                        x2="100"
+                                        y2="0.5"
                                         stroke="#e98074"
-                                        strokeWidth="1"
-                                        fill="none"
-                                        variants={lineVariants}
+                                        strokeWidth="2"
+                                        variants={draw}
                                         initial="hidden"
                                         animate={
                                             imageLoaded ? "visible" : "hidden"
                                         }
-                                        transition={{ delay: 2.9 }}
+                                        custom={3}
                                     />
                                 </svg>
                             </div>
 
+                            {/* Submit Button */}
                             <button
                                 type="submit"
-                                className="font-italiana w-full text-center bg-salmon text-gray-800 py-3 px-4 mt-2 rounded-xl border-none cursor-pointer text-lg font-semibold hover:scale-105 hover:bg-salmon-dark transition-all duration-300 ease-in-out hover:shadow-lg"
+                                className="w-full text-center bg-salmon text-gray-800 py-3 px-4 mt-2 
+                                           rounded-xl border-none cursor-pointer text-lg font-semibold 
+                                           hover:scale-105 hover:bg-salmon-dark transition-all duration-300 
+                                           ease-in-out hover:shadow-lg"
                             >
                                 Send
                             </button>
