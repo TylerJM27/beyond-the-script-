@@ -1,163 +1,219 @@
 import Header from "../components/Header";
-import styled from "styled-components";
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-    align-items: center;
-    padding: 40px;
-    @media (max-width: 960px) {
-        padding: 0px;
-    }
-`;
-
-const Wrapper = styled.div`
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    max-width: 1350px;
-    padding: 0px 0px 80px 0px;
-    gap: 12px;
-    @media (max-width: 960px) {
-        flex-direction: column;
-    }
-`;
-
-const Title = styled.div`
-    font-family: Italiana;
-    font-size: 42px;
-    text-align: center;
-    font-weight: 600;
-    margin-top: 20px;
-    color: ${({ theme }) => theme.text_primary};
-    @media (max-width: 768px) {
-        margin-top: 12px;
-        font-size: 32px;
-    }
-`;
-
-const Desc = styled.div`
-    font-family: Italiana;
-    font-size: 18px;
-    text-align: center;
-    max-width: 600px;
-    color: ${({ theme }) => theme.text_secondary};
-    @media (max-width: 768px) {
-        margin-top: 12px;
-        font-size: 16px;
-    }
-`;
-
-const ContactForm = styled.form`
-    font-family: Italiana;
-    width: 95%;
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    background-color: ${({ theme }) => theme.card};
-    padding: 32px;
-    border-radius: 16px;
-    box-shadow: rgba(23, 92, 230, 0.15) 0px 4px 24px;
-    margin-top: 28px;
-    gap: 12px;
-`;
-
-const ContactTitle = styled.div`
-    font-family: Italiana;
-    font-size: 24px;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: ${({ theme }) => theme.text_primary};
-`;
-
-const ContactInput = styled.input`
-    flex: 1;
-    background-color: transparent;
-    border: 1px solid ${({ theme }) => theme.text_secondary};
-    outline: none;
-    font-size: 18px;
-    color: ${({ theme }) => theme.text_primary};
-    border-radius: 12px;
-    padding: 12px 16px;
-    &:focus {
-        border: 1px solid ${({ theme }) => theme.primary};
-    }
-`;
-
-const ContactInputMessage = styled.textarea`
-    flex: 1;
-    background-color: transparent;
-    border: 1px solid ${({ theme }) => theme.text_secondary};
-    outline: none;
-    font-size: 18px;
-    color: ${({ theme }) => theme.text_primary};
-    border-radius: 12px;
-    padding: 12px 16px;
-    &:focus {
-        border: 1px solid ${({ theme }) => theme.primary};
-    }
-`;
-
-const ContactButton = styled.input`
-font-family: Italiana;
-    width: 100%;
-    text-decoration: none;
-    text-align: center;
-    background: #e98074;
-    padding: 13px 16px;
-    margin-top: 2px;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    color: ${({ theme }) => theme.text_primary};
-    font-size: 18px;
-    font-weight: 600;
-    &:hover {
-        transform: scale(1.05);
-    transition: all 0.4s ease-in-out;
-    box-shadow:  20px 20px 60px #1F2634,
-    filter: brightness(1);
-    background: #e85a4f;
-    }    
-`;
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import directing1 from "../app/assets/images/directing1.jpg";
 
 const ContactPage = () => {
+    const [imageLoaded, setImageLoaded] = useState(false);
+
+    useEffect(() => {
+        const img = new Image();
+        img.onload = () => {
+            setImageLoaded(true);
+        };
+        img.src = directing1;
+    }, []);
+
+    const lineVariants = {
+        hidden: { pathLength: 0 },
+        visible: {
+            pathLength: 1,
+            transition: { duration: 0.8, ease: "easeInOut" },
+        },
+    };
+
+    const textVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { duration: 0.6, ease: "easeInOut" },
+        },
+    };
+
     return (
-        <div className="works-page-background vh-100">
+        <div className="min-h-screen bg-cream">
             <Header />
-            <Container id="contact">
-                <Wrapper>
-                    <Title>Contact</Title>
-                    <Desc>
-                        Feel free to reach out to me for any questions or
-                        opportunities!
-                    </Desc>
-                    <ContactForm>
-                        <ContactTitle>Email me</ContactTitle>
-                        <ContactInput
-                            placeholder="Your Email"
-                            name="from_email"
+            <div className="flex flex-col justify-center items-center relative z-10 px-10 md:px-0 min-h-screen">
+                <div className="relative flex justify-between items-center flex-col lg:flex-row w-full max-w-7xl pb-20 gap-12">
+                    {/* Left Half - Image */}
+                    <div className="w-full lg:w-1/2 h-96 lg:h-[600px]">
+                        <img
+                            src={directing1}
+                            alt="Directing"
+                            className="w-full h-full object-cover rounded-2xl"
+                            onLoad={() => setImageLoaded(true)}
                         />
-                        <ContactInput
-                            placeholder="Your Name"
-                            name="from_name"
-                        />
-                        <ContactInput placeholder="Subject" name="title" />
-                        <ContactInputMessage
-                            placeholder="Message"
-                            rows="4"
-                            name="message"
-                        />
-                        <ContactButton type="submit" value="Send" />
-                    </ContactForm>
-                </Wrapper>
-            </Container>
+                    </div>
+
+                    {/* Right Half - Contact Form */}
+                    <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start">
+                        <h1 className="font-italiana text-4xl md:text-5xl text-center lg:text-left font-semibold mt-5 text-gray-800 mb-3">
+                            Contact
+                        </h1>
+                        <p className="font-italiana text-lg text-center lg:text-left max-w-lg text-gray-600 mb-7">
+                            Feel free to reach out to me for any questions or
+                            opportunities!
+                        </p>
+
+                        <form className="font-italiana w-full max-w-lg flex flex-col gap-8">
+                            <h2 className="font-italiana text-2xl font-semibold text-gray-800 mb-2">
+                                Email me
+                            </h2>
+
+                            {/* Email Field */}
+                            <div className="relative">
+                                <input
+                                    type="email"
+                                    placeholder="Your Email"
+                                    name="from_email"
+                                    className="w-full bg-transparent outline-none text-lg text-gray-800 pb-2 placeholder-transparent peer"
+                                />
+                                <motion.label
+                                    className="absolute left-0 top-0 text-lg text-gray-600 pointer-events-none transition-all peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg peer-focus:-top-6 peer-focus:text-sm peer-focus:text-salmon"
+                                    variants={textVariants}
+                                    initial="hidden"
+                                    animate={imageLoaded ? "visible" : "hidden"}
+                                    transition={{ delay: 3.2 }}
+                                >
+                                    Your Email
+                                </motion.label>
+                                <svg
+                                    className="absolute bottom-0 left-0 w-full h-0.5"
+                                    viewBox="0 0 100 1"
+                                >
+                                    <motion.path
+                                        d="M0,0.5 L100,0.5"
+                                        stroke="#e98074"
+                                        strokeWidth="1"
+                                        fill="none"
+                                        variants={lineVariants}
+                                        initial="hidden"
+                                        animate={
+                                            imageLoaded ? "visible" : "hidden"
+                                        }
+                                        transition={{ delay: 0.5 }}
+                                    />
+                                </svg>
+                            </div>
+
+                            {/* Name Field */}
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="Your Name"
+                                    name="from_name"
+                                    className="w-full bg-transparent outline-none text-lg text-gray-800 pb-2 placeholder-transparent peer"
+                                />
+                                <motion.label
+                                    className="absolute left-0 top-0 text-lg text-gray-600 pointer-events-none transition-all peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg peer-focus:-top-6 peer-focus:text-sm peer-focus:text-salmon"
+                                    variants={textVariants}
+                                    initial="hidden"
+                                    animate={imageLoaded ? "visible" : "hidden"}
+                                    transition={{ delay: 3.4 }}
+                                >
+                                    Your Name
+                                </motion.label>
+                                <svg
+                                    className="absolute bottom-0 left-0 w-full h-0.5"
+                                    viewBox="0 0 100 1"
+                                >
+                                    <motion.path
+                                        d="M0,0.5 L100,0.5"
+                                        stroke="#e98074"
+                                        strokeWidth="1"
+                                        fill="none"
+                                        variants={lineVariants}
+                                        initial="hidden"
+                                        animate={
+                                            imageLoaded ? "visible" : "hidden"
+                                        }
+                                        transition={{ delay: 1.3 }}
+                                    />
+                                </svg>
+                            </div>
+
+                            {/* Subject Field */}
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="Subject"
+                                    name="title"
+                                    className="w-full bg-transparent outline-none text-lg text-gray-800 pb-2 placeholder-transparent peer"
+                                />
+                                <motion.label
+                                    className="absolute left-0 top-0 text-lg text-gray-600 pointer-events-none transition-all peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg peer-focus:-top-6 peer-focus:text-sm peer-focus:text-salmon"
+                                    variants={textVariants}
+                                    initial="hidden"
+                                    animate={imageLoaded ? "visible" : "hidden"}
+                                    transition={{ delay: 3.6 }}
+                                >
+                                    Subject
+                                </motion.label>
+                                <svg
+                                    className="absolute bottom-0 left-0 w-full h-0.5"
+                                    viewBox="0 0 100 1"
+                                >
+                                    <motion.path
+                                        d="M0,0.5 L100,0.5"
+                                        stroke="#e98074"
+                                        strokeWidth="1"
+                                        fill="none"
+                                        variants={lineVariants}
+                                        initial="hidden"
+                                        animate={
+                                            imageLoaded ? "visible" : "hidden"
+                                        }
+                                        transition={{ delay: 2.1 }}
+                                    />
+                                </svg>
+                            </div>
+
+                            {/* Message Field */}
+                            <div className="relative">
+                                <textarea
+                                    placeholder="Message"
+                                    rows="4"
+                                    name="message"
+                                    className="w-full bg-transparent outline-none text-lg text-gray-800 pb-2 placeholder-transparent peer resize-none"
+                                />
+                                <motion.label
+                                    className="absolute left-0 top-0 text-lg text-gray-600 pointer-events-none transition-all peer-placeholder-shown:top-0 peer-placeholder-shown:text-lg peer-focus:-top-6 peer-focus:text-sm peer-focus:text-salmon"
+                                    variants={textVariants}
+                                    initial="hidden"
+                                    animate={imageLoaded ? "visible" : "hidden"}
+                                    transition={{ delay: 3.8 }}
+                                >
+                                    Message
+                                </motion.label>
+                                <svg
+                                    className="absolute bottom-0 left-0 w-full h-0.5"
+                                    viewBox="0 0 100 1"
+                                >
+                                    <motion.path
+                                        d="M0,0.5 L100,0.5"
+                                        stroke="#e98074"
+                                        strokeWidth="1"
+                                        fill="none"
+                                        variants={lineVariants}
+                                        initial="hidden"
+                                        animate={
+                                            imageLoaded ? "visible" : "hidden"
+                                        }
+                                        transition={{ delay: 2.9 }}
+                                    />
+                                </svg>
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="font-italiana w-full text-center bg-salmon text-gray-800 py-3 px-4 mt-2 rounded-xl border-none cursor-pointer text-lg font-semibold hover:scale-105 hover:bg-salmon-dark transition-all duration-300 ease-in-out hover:shadow-lg"
+                            >
+                                Send
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
